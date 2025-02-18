@@ -1,0 +1,99 @@
+# ---- .NET Core ----
+
+# Build output
+bin/
+obj/
+out/
+*.exe
+*.dll
+*.pdb
+*.app/
+*.vs/
+*.vscode/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.swp
+
+# Logs & debug
+logs/
+*.log
+debug/
+dump/
+
+# Entity Framework migrations
+Migrations/
+
+# Configuration files (keep only if necessary)
+appsettings*.json
+secrets.json
+.env
+
+# Visual Studio & Rider specific
+.vscode/
+.idea/
+*.bak
+
+# .NET Core runtime files
+*.runtimeconfig.json
+*.deps.json
+
+# NuGet packages
+*.nupkg
+packages/
+.nuget/
+project.lock.json
+
+# Generated code
+Generated_Code/
+
+# ---- Angular ----
+
+# Node modules
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Angular build outputs
+dist/
+tmp/
+out-tsc/
+
+# TypeScript
+*.tsbuildinfo
+
+# Environment files (keep `environment.ts`, ignore production secrets)
+src/environments/environment.prod.ts
+
+# IDE/editor settings
+*.sublime-workspace
+*.idea/
+*.vscode/
+*.DS_Store
+
+# Cache & Temp
+/.angular/cache
+/.angular/compiler
+/.cache
+/.eslintcache
+
+# Test coverage
+coverage/
+karma-coverage/
+test-reports/
+
+# Misc
+*.gz
+*.zip
+*.7z
+
+# Optional: Ignore generated Swagger files
+wwwroot/swagger/
+swagger.json
+swagger-ui/
