@@ -1,78 +1,50 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿using Microsoft.AspNetCore.Mvc;
+using Service.Interface;
+using System.Threading.Tasks;
 using DTO;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
-namespace LibraryManagementSystem.Controllers
+namespace YourNamespace.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly IConfiguration _configuration;
+        private readonly IAuthService _authService;
 
-        public AuthController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration)
+        public AuthController(IAuthService authService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _configuration = configuration;
+            _authService = authService;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto model)
+        public async Task<IActionResult> Register([FromBody] RegistrationDto model)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid)  // ❌ Validation fails, return errors
+            {
                 return BadRequest(ModelState);
+            }
 
-            var user = new IdentityUser { UserName = model.Email, Email = model.Email };
-            var result = await _userManager.CreateAsync(user, model.Password);
+            var result = await _authService.RegisterAsync(model);
+            if (result == null)
+                 return BadRequest("User registration failed.");
 
-            if (!result.Succeeded)
-                return BadRequest(result.Errors);
-
-            return Ok(new { message = "User registered successfully!" });
+            return Ok(new { message = result });
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
-                return Unauthorized(new { message = "Invalid email or password" });
+            var token = await _authService.LoginAsync(model);
+            if (token == null)
+                return Unauthorized("Invalid email or password.");
 
-            var token = GenerateJwtToken(user);
             return Ok(new { token });
-        }
-
-        private string GenerateJwtToken(IdentityUser user)
-        {
-            var jwtSettings = _configuration.GetSection("JwtSettings");
-            var key = Encoding.UTF8.GetBytes(s: jwtSettings["Secret"]);
-
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
-
-            var token = new JwtSecurityToken(
-                issuer: jwtSettings["Issuer"],
-                audience: jwtSettings["Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(1),
-                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key)
-, SecurityAlgorithms.HmacSha256)
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
+
+
+
+
+
 

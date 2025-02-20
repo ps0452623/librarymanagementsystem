@@ -1,9 +1,12 @@
 using DataAcessLayer;
+using LibaryManagementSystem.MappingProfile;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Service.Implementation;
+using Service.Interface;
 using System;
 using System.Text;
 
@@ -15,25 +18,38 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+
+
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        var key = builder.Configuration["Jwt:Key"];
+        if (string.IsNullOrEmpty(key))
+            throw new ArgumentNullException("JWT Key is missing from configuration.");
+
         options.TokenValidationParameters = new TokenValidationParameters
         {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
             ValidateIssuer = true,
             ValidateAudience = true,
-            ValidateLifetime = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            ValidAudience = builder.Configuration["Jwt:Audience"]
         };
     });
 
 
+builder.Logging.AddConsole();
 
 
 

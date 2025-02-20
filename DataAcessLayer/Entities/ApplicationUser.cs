@@ -1,6 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
+namespace DataAcessLayer
 
-public class ApplicationUser : IdentityUser
 {
+    public class ApplicationUser : IdentityUser
+    {
+
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string ProfilePicture { get; set; } = string.Empty;
+    }
 }
 
