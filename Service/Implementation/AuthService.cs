@@ -33,11 +33,11 @@ namespace Service.Implementation
         {
             var user = _mapper.Map<ApplicationUser>(model);
             var result = await _userManager.CreateAsync(user, model.Password);
-            await _userManager.AddToRoleAsync(user, model.Role);
+          
 
             if (!result.Succeeded)
                 return null; // Registration failed
-
+            await _userManager.AddToRoleAsync(user, model.Role);
             return "User registered successfully!";
         }
 

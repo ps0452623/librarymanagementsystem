@@ -30,6 +30,6 @@ namespace DTO
         public string Phone { get; set; }
         public string Role { get; set; } = string.Empty;
 
-        public string ProfilePicture { get; set; } = string.Empty;
+        
     }
 }

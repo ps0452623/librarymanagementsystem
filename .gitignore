@@ -28,7 +28,7 @@ dump/
 Migrations/
 
 # Configuration files (keep only if necessary)
-appsettings*.json
+
 secrets.json
 .env
 
