@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using DataAcessLayer.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,6 +16,9 @@ namespace DataAcessLayer
         {
         }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet <Student> Students { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Branch> Branches { get; set; }
     }
 }
 
