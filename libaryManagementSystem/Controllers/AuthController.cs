@@ -21,7 +21,7 @@ namespace YourNamespace.Controllers
         {
             if (!ModelState.IsValid)  // ❌ Validation fails, return errors
             {
-                return BadRequest(ModelState);
+                return BadRequest (ModelState);
             }
 
             var result = await _authService.RegisterAsync(model);
