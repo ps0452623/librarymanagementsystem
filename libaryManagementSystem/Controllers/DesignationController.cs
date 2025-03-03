@@ -16,8 +16,10 @@ namespace LibaryManagementSystem.Controllers
         {
             _designationService = designationService;
         }
-        [HttpGet(" GetAll ")]
-        public async Task<ActionResult<IEnumerable<DesignationDto>>> GetAll()
+
+
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAll()
         {
             var designations = await _designationService.GetAll();
             return Ok(designations);
@@ -30,5 +32,25 @@ namespace LibaryManagementSystem.Controllers
             return Ok(designation);
         }
 
+        [HttpPost("Add")]
+        public async Task<IActionResult> Add([FromBody]DesignationDto designationDto)
+        {
+            if(designationDto == null)
+            {
+                return BadRequest("Invalid Data");
+            }
+            var result = await _designationService.Add(designationDto); 
+
+            if(result=="Created")
+            {
+                return StatusCode(201, "Designation added successfully.");
+            }
+            if (result != "Created")
+            {
+                return BadRequest("Failed to add designation.");
+            }
+             return Ok(result);
+            
+        }
     }
 }

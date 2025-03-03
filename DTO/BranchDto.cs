@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace DTO
 {
-    public class DesignationDto
+   public  class BranchDto
     {
 
-         public Guid Id { get; set; }
-       
-         [Required(ErrorMessage = "This field is required")]
-        public string Name { get; set; }
+        public Guid Id { get; set; }
 
+        [Required(ErrorMessage = "BranchName is required")]
+        public string Name { get; set; } = string.Empty;
+       
     }
 }

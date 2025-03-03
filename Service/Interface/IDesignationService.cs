@@ -11,5 +11,6 @@ namespace Service.Interface
     {
         Task<IEnumerable<DesignationDto>> GetAll();
         Task<DesignationDto> GetById(Guid id);
+        Task<String> Add(DesignationDto DesignationDto);
     }
 }

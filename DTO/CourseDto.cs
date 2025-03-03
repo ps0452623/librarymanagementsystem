@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 
 namespace DTO
 {
-    public class DesignationDto
+    public class CourseDto
     {
+        
+        public Guid Id { get; set; }
 
-         public Guid Id { get; set; }
-       
-         [Required(ErrorMessage = "This field is required")]
-        public string Name { get; set; }
-
+        [Required(ErrorMessage ="CourseName is required")]
+        public string Name { get; set; } = string.Empty;
     }
 }

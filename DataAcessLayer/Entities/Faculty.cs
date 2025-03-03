@@ -10,11 +10,11 @@ namespace DataAcessLayer.Entities
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
-        
+        public ApplicationUser User { get; set; }
+
         public Guid DesignationId { get; set; }
         public Designation Designation { get; set; }
 
-     
     }
 
 }

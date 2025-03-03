@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using DataAcessLayer.Entities;
 using DTO;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Service.Interface
 {
@@ -12,7 +14,14 @@ namespace Service.Interface
     {
         Task<IEnumerable<FacultyDto>> GetAll();
         Task<FacultyDto> GetById(Guid id);
-        //Task<bool> Add(FacultyDto facultyDto);
-    
+        Task<string> AddOrUpdate(FacultyDto facultyDto);
+
+        //Task<bool> Update(FacultyDto facultyDto);
+        Task<Faculty> GetByUserIdAsync(Guid userId);
+        Task<string> UploadFileAsync(IFormFile file);
+
+
+        Task<FacultyResponseDto> GetFacultyProfileByIdAsync(Guid id);
+        //Task<FacultyResponseDto> GetFacultyProfilesAsync(Guid id);
     }
 }

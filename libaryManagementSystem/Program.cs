@@ -1,6 +1,9 @@
+
+using DataAccessLayer.Repository;
 using DataAcessLayer;
-using DataAcessLayer.TempRepository;
 using LibaryManagementSystem.MappingProfile;
+using LibraryManagement.Services.Implementations;
+using LibraryManagement.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -24,11 +27,12 @@ builder.Services.AddScoped<IFacultyService, FacultyService>();
 
 builder.Services.AddScoped<IDesignationService, DesignationService>();
 
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 
 
 
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
@@ -89,5 +93,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
 

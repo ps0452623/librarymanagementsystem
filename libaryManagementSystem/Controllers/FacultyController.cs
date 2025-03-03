@@ -18,8 +18,8 @@ namespace LibaryManagementSystem.Controllers
 
         }
 
-        [HttpGet(" GetAll ")]
-        public async Task<ActionResult<IEnumerable<FacultyDto>>> GetAll()
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAll()
         {
             var faculties = await _facultyService.GetAll();
             return Ok(faculties);
@@ -31,20 +31,44 @@ namespace LibaryManagementSystem.Controllers
             if (faculty == null) return NotFound("Faculty not find");
             return Ok(faculty);
         }
-//
-//
-//      [HttpPost("Add")]
-//        public async Task<IActionResult> CreateFaculty([FromBody] FacultyDto facultyDto)
-//        {
-//            if (facultyDto == null)
-//                return BadRequest("Invalid Faculty data.");
 
-//            var success = await _facultyService.Add(facultyDto);
-//            if (!success)
-//                return StatusCode(500, "Error creating Faculty.");
 
-//            return Ok("Faculty created successfully.");
-//        }
-//       
+        [HttpPost("Add/Update")]
+        public async Task<IActionResult> CreateOrUpdate([FromForm] FacultyDto facultyDto)
+        {
+            if (facultyDto == null)
+                return BadRequest("Invalid Faculty data.");
+
+            var result = await _facultyService.AddOrUpdate(facultyDto);
+
+            if (result == "Created")
+            {
+                return Ok("Faculty created successfully.");
+            }
+            if (result == "Updated")
+            {
+                return Ok("Faculty Updated successfully.");
+            }
+            else
+            {
+                return StatusCode(500, "Error processing faculty data.");
+            }
+        }
+
+        [HttpGet("GetFacultyProfile{id}")]
+        public async Task<ActionResult<FacultyDto>> GetProfileById(Guid id)
+        {
+            var facultyProfile = await _facultyService.GetFacultyProfileByIdAsync(id);
+
+
+        if (facultyProfile == null)
+        {
+            return NotFound("Faculty not found.");
+        }
+
+        return Ok(facultyProfile);  
+        }
+
+        
     }
 }
