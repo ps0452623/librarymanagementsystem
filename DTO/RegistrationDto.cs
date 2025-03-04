@@ -27,7 +27,7 @@ namespace DTO
         public string ConfirmPassword { get; set; }
 
         [MinLength(10, ErrorMessage = "Phone must be at least 10 characters long")]
-        public string Phone { get; set; }
+        public string PhoneNumber { get; set; }
         public string Role { get; set; } = string.Empty;
 
         
