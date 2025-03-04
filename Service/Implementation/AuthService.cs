@@ -50,6 +50,7 @@ namespace Service.Implementation
             return GenerateJwtToken(user);
         }
 
+
         private string GenerateJwtToken(ApplicationUser user)
         {
             var keyBytes = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
@@ -58,7 +59,7 @@ namespace Service.Implementation
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email)
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),

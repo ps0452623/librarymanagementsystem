@@ -14,6 +14,7 @@ namespace LibaryManagementSystem.MappingProfile
             CreateMap<Course, CourseDto>().ReverseMap();
             CreateMap<Branch, BranchDto>().ReverseMap();
 
+           
 
             CreateMap<RegistrationDto, ApplicationUser>()
                      .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email)).ReverseMap();

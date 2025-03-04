@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DataAccessLayer.Repository;
 using DataAcessLayer;
-
+using DataAcessLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.Repository
@@ -36,12 +36,17 @@ namespace DataAccessLayer.Repository
             return true;
 
         }
-        public async Task<bool> UpdateAsync( Guid Id,T entity)
+        public async Task<bool> UpdateAsync( T entity)
         {
             _dbSet.Update(entity);
             await _context.SaveChangesAsync();
             return true;
         }
+        public IQueryable<T> GetQueryable() 
+        {
+            return _dbSet.AsQueryable();
+        }
+
         public async Task<bool> DeleteAsync(int id)
         {
             var entity = await _dbSet.FindAsync(id)
