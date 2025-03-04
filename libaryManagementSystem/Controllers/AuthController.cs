@@ -40,8 +40,13 @@ namespace YourNamespace.Controllers
 
             return Ok(new { token });
         }
+
+        
     }
 }
+            return Ok( new { Data = User });
+
+           
 
 
 
