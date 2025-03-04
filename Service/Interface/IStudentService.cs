@@ -7,7 +7,6 @@ namespace LibraryManagement.Services.Interfaces
     {
         Task<IEnumerable<StudentDto>> GetAllAsync();
         Task<StudentDto> GetByIdAsync(Guid id);
-
         
     }
 }
