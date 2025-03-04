@@ -14,7 +14,7 @@ namespace DataAccessLayer.Repository
         Task<bool> AddAsync(T entity);
         Task<bool> UpdateAsync(T entity);
         Task<bool> DeleteAsync(int id);
-        IQueryable<T> GetQueryable();
+        IQueryable<T> Query();
 
 
 

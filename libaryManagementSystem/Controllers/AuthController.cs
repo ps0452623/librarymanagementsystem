@@ -5,6 +5,7 @@ using DTO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using DataAcessLayer;
+using DataAccessLayer.Repository;
 
 namespace YourNamespace.Controllers
 {
@@ -12,16 +13,14 @@ namespace YourNamespace.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-       // private readonly UserManager<ApplicationUser> _userManager;
+        
         private readonly IAuthService _authService;
-         //private readonly IWebHostEnvironment _webHostEnvironment;
-
-        public AuthController(IAuthService authService )//, UserManager<ApplicationUser> userManager , IWebHostEnvironment webHostEnvironment)
+        
+        
+        public AuthController(IAuthService authService)
         {
             _authService = authService;
-           // _userManager = userManager;
-           // _webHostEnvironment = webHostEnvironment;
-
+            
         }
 
         [HttpPost("register")]
@@ -49,44 +48,19 @@ namespace YourNamespace.Controllers
             return Ok(new { token });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetUser(UserFilterRequest request)
+        
+        {
+            var query = _authService.GetUserAsync(request);
+            return Ok( new { Data = User });
 
-       
-       
-            //[HttpPost("upload-profile-picture/{userId}")]
-            //public async Task<IActionResult> UploadProfilePicture(string userId, [FromForm] StudentDto studentDto)
-            //{
-            //    // Check if file is uploaded
-            //    if (studentDto.ProfilePhoto == null || studentDto.ProfilePhoto.Length == 0)
-            //        return BadRequest("Invalid file.");
+        }
 
-            //    // Find user by ID
-            //    var user = await _userManager.FindByIdAsync(userId);
-            //    if (user == null)
-            //        return NotFound("User not found.");
 
-            //    // Create folder if not exists
-            //    var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "profile_pictures");
-            //    if (!Directory.Exists(uploadsFolder))
-            //        Directory.CreateDirectory(uploadsFolder);
+           
 
-            //    // Generate unique file name
-            //    var fileName = $"{userId}{Path.GetExtension(studentDto.ProfilePhoto.FileName)}";
-            //    var filePath = Path.Combine(uploadsFolder, fileName);
 
-            //    // Save file
-            //    using (var stream = new FileStream(filePath, FileMode.Create))
-            //    {
-            //        await studentDto.ProfilePhoto.CopyToAsync(stream);
-            //    }
 
-            //    // Update user profile picture path
-            //    user.ProfilePicture = $"/profile_pictures/{fileName}";
-            //    await _userManager.UpdateAsync(user);
-
-            //    return Ok(new { Message = "Profile picture uploaded successfully!", ProfilePictureUrl = user.ProfilePicture });
-            //}
-       
-    
     }
 }
-

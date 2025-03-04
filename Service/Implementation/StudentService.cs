@@ -55,15 +55,13 @@ namespace LibraryManagement.Services.Implementations
         public async Task<StudentResponseDto> GetStudentDetailByIdAsync(Guid Id)
         {
             var student = await _studentRepository
-                .GetQueryable()
+                .Query()
                 .Include(s => s.User) // Join with AspNetUsers
                 .Include(s => s.Branch)         // Join with Branch
                     .ThenInclude(b => b.Course) // Join Branch with Course
                 .FirstOrDefaultAsync(s => s.UserId == Id);
 
-            if (student == null)
-                return null;
-
+           
             return new StudentResponseDto
             {
 
@@ -71,8 +69,10 @@ namespace LibraryManagement.Services.Implementations
                 LastName = student.User.LastName,
                 FatherName = student.FatherName,
                 MotherName = student.MotherName,
+                Email = student.User.Email,
                 RollNumber = student.RollNumber,
                 Semester = student.Semester,
+                PhoneNumber = student.User.PhoneNumber,
                 EmergencyContactNumber = student.EmergencyContactNumber,
                 BranchName = student.Branch.Name,  // Fetch Branch Name
                 CourseName = student.Branch.Course.Name,  // Fetch Course Name

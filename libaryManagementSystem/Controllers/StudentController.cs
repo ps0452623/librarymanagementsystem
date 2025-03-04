@@ -46,7 +46,7 @@ namespace LibraryManagement.Controllers
 
         }
 
-        [HttpGet("GetStudentDetailById/{Id}")]
+        [HttpGet("GetStudentDetailBy/{Id}")]
         public async Task<IActionResult> GetStudentDetailByIdAsync(Guid Id)
         {
             var student = await _studentService.GetStudentDetailByIdAsync(Id);

@@ -13,8 +13,10 @@ namespace Service.Interface
 
         Task<string> LoginAsync(LoginDto model);
         Task<string> RegisterAsync(RegistrationDto model);
+
         
+
     }
-    }
+  }
 
 
