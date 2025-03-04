@@ -16,9 +16,14 @@ namespace DataAcessLayer
         {
         }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Faculty> Faculties {  get; set; }
+
+        public DbSet<Designation> Designations { get; set; }
         public DbSet <Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Branch> Branches { get; set; }
+        public DbSet<Book> Books { get; set; }
+
     }
 }
 
