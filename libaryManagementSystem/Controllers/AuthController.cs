@@ -2,6 +2,10 @@
 using Service.Interface;
 using System.Threading.Tasks;
 using DTO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using DataAcessLayer;
+using DataAccessLayer.Repository;
 
 namespace YourNamespace.Controllers
 {
@@ -44,7 +48,5 @@ namespace YourNamespace.Controllers
 }
 
 
-
-
-
-
+    }
+}
