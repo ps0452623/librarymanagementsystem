@@ -48,14 +48,7 @@ namespace YourNamespace.Controllers
             return Ok(new { token });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetUser(UserFilterRequest request)
         
-        {
-            var query = _authService.GetUserAsync(request);
-            return Ok( new { Data = User });
-
-        }
 
 
            
