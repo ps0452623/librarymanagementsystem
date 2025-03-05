@@ -11,24 +11,12 @@ namespace Service.Interface
 {
     public interface IBookService
     {
-        Task<IEnumerable<BookDto>> GetAllAsync();
-        Task<IEnumerable<BookDto>> GetByIdAsync(Guid id);
-
-        Task<string> AddOrUpdate(FacultyDto facultyDto);
-
-
-
-
-        //Task<IEnumerable<FacultyDto>> GetAll();
-        //Task<FacultyDto> GetById(Guid id);
-        //Task<string> AddOrUpdate(FacultyDto facultyDto);
-
-        ////Task<bool> Update(FacultyDto facultyDto);
-        //Task<Faculty> GetByUserIdAsync(Guid userId);
-        //Task<string> UploadFileAsync(IFormFile file);
+        Task<IEnumerable<BookResponseDto>> GetAll();
+        Task<BookResponseDto> GetById(Guid id);
+        Task<string> Create(BookRequestDto bookRequestDto);
+        Task<string> Update(Guid id, BookRequestDto bookRequestDto);
+        Task<string> Delete(Guid id);
 
 
-        //Task<FacultyResponseDto> GetFacultyProfileByIdAsync(Guid id);
-        //Task<FacultyResponseDto> GetFacultyProfilesAsync(Guid id);
     }
 }
