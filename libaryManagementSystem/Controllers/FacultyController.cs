@@ -24,7 +24,6 @@ namespace LibaryManagementSystem.Controllers
             var faculties = await _facultyService.GetAll();
             return Ok(faculties);
         }
-      
 
 
         [HttpPost("Add/Update")]
