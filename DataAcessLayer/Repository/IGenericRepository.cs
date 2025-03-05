@@ -14,7 +14,7 @@ namespace DataAccessLayer.Repository
         Task<T> GetByIdAsync(Guid id);
         Task<bool> AddAsync(T entity);
         Task<bool> UpdateAsync(T entity);
-        Task<bool> DeleteAsync(int id);
+        Task<bool> DeleteAsync(Guid id);
         
         
     }

@@ -25,7 +25,7 @@ namespace Service.Implementation
         {
 
 
-        var query = _userRepository.Query();
+        var query = _userRepository.GetQueryable();
 
             // Apply Search Filter
             if (!string.IsNullOrEmpty(request.Search))

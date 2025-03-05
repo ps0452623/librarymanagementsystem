@@ -47,7 +47,7 @@ namespace DataAccessLayer.Repository
             return true;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
             var entity = await _dbSet.FindAsync(id)
 ;

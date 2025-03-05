@@ -17,6 +17,7 @@ namespace DataAcessLayer.Entities
         public int YearPublished { get; set; }
         public int CopiesAvailable { get; set; }
         public int BookShelfNumber { get; set; }
+        public string Picture { get; set; }
 
     }
 }

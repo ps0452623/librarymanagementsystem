@@ -24,13 +24,7 @@ namespace LibaryManagementSystem.Controllers
             var faculties = await _facultyService.GetAll();
             return Ok(faculties);
         }
-        [HttpGet("GetById/{id}")]
-        public async Task<ActionResult<FacultyDto>> GetById(Guid id)
-        {
-            var faculty = await _facultyService.GetById(id);
-            if (faculty == null) return NotFound("Faculty not find");
-            return Ok(faculty);
-        }
+      
 
 
         [HttpPost("Add/Update")]
@@ -55,7 +49,7 @@ namespace LibaryManagementSystem.Controllers
             }
         }
 
-        [HttpGet("GetFacultyProfile{id}")]
+        [HttpGet("GetFacultyProfileById{id}")]
         public async Task<ActionResult<FacultyDto>> GetProfileById(Guid id)
         {
             var facultyProfile = await _facultyService.GetFacultyProfileByIdAsync(id);

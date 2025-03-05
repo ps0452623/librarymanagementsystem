@@ -139,9 +139,10 @@ namespace Service.Implementation
             var designationQuery = _designationRepository.GetQueryable(); // Get Designation IQueryable
 
             var result = await (from faculty in facultyQuery
-                                join user in userQuery on faculty.UserId.ToString() equals user.Id
+                                join user in userQuery on faculty.UserId.ToString() equals user.Id.ToString()
                                 join designation in designationQuery
-                                    on faculty.DesignationId equals designation.Id into dsg
+                                    on faculty.Designation.Id equals designation.Id into dsg
+
                                 from designation in dsg.DefaultIfEmpty() // Left join to include null values
                                 where faculty.Id == id
                                 select new FacultyResponseDto
@@ -150,7 +151,7 @@ namespace Service.Implementation
                                     LastName = user.LastName,
                                     Email = user.Email,
                                     PhoneNumber = user.PhoneNumber,
-                                    //Role = "Faculty",
+                                    Role = "Faculty",
                                     DesignationName = designation != null ? designation.Name : "N/A",
                                     ProfilePictureUrl = user.ProfilePicture
                                 }).FirstOrDefaultAsync();

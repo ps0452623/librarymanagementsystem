@@ -21,7 +21,8 @@ namespace LibaryManagementSystem.MappingProfile
             CreateMap<FacultyDto, Faculty>().ReverseMap();
 
             CreateMap<DesignationDto, Designation>().ReverseMap();
-
+            CreateMap<BookRequestDto, Book>();
+            CreateMap<Book, BookResponseDto>();
 
         }
     }

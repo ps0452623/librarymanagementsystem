@@ -40,10 +40,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
-
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
