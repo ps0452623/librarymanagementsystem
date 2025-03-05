@@ -10,7 +10,7 @@ namespace LibraryManagement.Services.Interfaces
     {
         Task<IEnumerable<StudentDto>> GetAllAsync();
         Task<StudentDto> GetByIdAsync(Guid id);
-       Task<String> AddOrUpdateStudentAsync(StudentDto studentDto);
+        Task<String> AddOrUpdateStudentAsync(StudentDto studentDto);
         Task<Student> GetByUserIdAsync(Guid userId);
         Task<string> UploadFileAsync(IFormFile file);
 

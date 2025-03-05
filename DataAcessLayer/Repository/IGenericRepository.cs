@@ -9,12 +9,15 @@ namespace DataAccessLayer.Repository
 {
     public interface IGenericRepository<T> where T : class
     {
+
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetByIdAsync(Guid id);
         Task<bool> AddAsync(T entity);
         Task<bool> UpdateAsync(T entity);
-        Task<bool> DeleteAsync(int id);
-        IQueryable<T> Query();
+        Task<bool> DeleteAsync(Guid id);
+        IQueryable<T> GetQuerable();
+
+
 
 
 

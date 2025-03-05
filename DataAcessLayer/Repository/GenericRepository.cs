@@ -42,7 +42,7 @@ namespace DataAccessLayer.Repository
             await _context.SaveChangesAsync();
             return true;
         }
-        public IQueryable<T> Query() 
+        public IQueryable<T> GetQuerable()
         {
             return _dbSet.AsQueryable();
         }

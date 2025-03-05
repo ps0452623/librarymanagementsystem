@@ -60,7 +60,7 @@ namespace LibraryManagement.Controllers
 
 
         [HttpPost("Add/Update")]
-        public async Task<IActionResult> AddOrUpdateStudentAsync([FromForm]StudentDto studentDto)
+        public async Task<IActionResult> AddOrUpdateStudentAsync([FromForm] StudentDto studentDto)
         {
             if (studentDto == null)
                 return BadRequest("Invalid Student data.");
@@ -85,29 +85,29 @@ namespace LibraryManagement.Controllers
 
 
 
-        [HttpPost("upload-profile-picture")]
+        //[HttpPost("upload-profile-picture")]
 
-        public async Task<IActionResult> UploadFile(string StudentId, IFormFile file)
-        {
-            if (file == null || file.Length == 0)
-            {
-                return BadRequest(new { message = "No file uploaded." });
-            }
+        //public async Task<IActionResult> UploadFile(string StudentId, IFormFile file)
+        //{
+        //    if (file == null || file.Length == 0)
+        //    {
+        //        return BadRequest(new { message = "No file uploaded." });
+        //    }
 
-            try
-            {
-                string fileUrl = await _studentService.UploadFileAsync(file);
-                return Ok(new { filePath = fileUrl });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "File upload failed.", error = ex.Message });
-            }
-        }
+        //    try
+        //    {
+        //        string fileUrl = await _studentService.UploadFileAsync(file);
+        //        return Ok(new { filePath = fileUrl });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new { message = "File upload failed.", error = ex.Message });
+        //    }
+        //}
 
 
     }
-    }
+}
 
 
 

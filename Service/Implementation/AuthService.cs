@@ -21,7 +21,7 @@ namespace Service.Implementation
 {
     public class AuthService : IAuthService
     {
-        
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
@@ -33,7 +33,7 @@ namespace Service.Implementation
             _signInManager = signInManager;
             _configuration = configuration;
             _mapper = mapper;
-            
+
         }
 
         public async Task<string> RegisterAsync(RegistrationDto model)
@@ -79,9 +79,9 @@ namespace Service.Implementation
             return tokenHandler.WriteToken(token);
         }
 
-                 
 
-          
-        }
+
+
     }
+}
 

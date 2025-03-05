@@ -55,13 +55,13 @@ namespace LibraryManagement.Services.Implementations
         public async Task<StudentResponseDto> GetStudentDetailByIdAsync(Guid Id)
         {
             var student = await _studentRepository
-                .Query()
+                .GetQuerable()
                 .Include(s => s.User) // Join with AspNetUsers
                 .Include(s => s.Branch)         // Join with Branch
                     .ThenInclude(b => b.Course) // Join Branch with Course
                 .FirstOrDefaultAsync(s => s.UserId == Id);
 
-           
+
             return new StudentResponseDto
             {
 
@@ -91,7 +91,7 @@ namespace LibraryManagement.Services.Implementations
 
         public async Task<String> AddOrUpdateStudentAsync(StudentDto studentDto)
         {
-            
+
             string profilePictureFileName = null;
             if (studentDto.ProfilePicture != null)
             {
@@ -118,20 +118,20 @@ namespace LibraryManagement.Services.Implementations
             newStudent.Id = Guid.NewGuid(); // Assign a new unique ID
             await _studentRepository.AddAsync(newStudent);
 
-           
+
             var user = await _userManager.FindByIdAsync(studentDto.UserId.ToString());
-            
-            
-                user.ProfilePicture = await UploadFileAsync(studentDto.ProfilePicture);
-                await _userManager.UpdateAsync(user);
-            
+
+
+            user.ProfilePicture = await UploadFileAsync(studentDto.ProfilePicture);
+            await _userManager.UpdateAsync(user);
+
 
 
             return "Created";
         }
 
 
-        
+
         public async Task<string> UploadFileAsync(IFormFile file)
         {
             try
