@@ -1,4 +1,5 @@
-﻿using DTO;
+﻿using DataAcessLayer.Entities;
+using DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,10 @@ namespace Service.Interface
 
         Task<string> LoginAsync(LoginDto model);
         Task<string> RegisterAsync(RegistrationDto model);
-        }
+
+        
+
     }
+  }
 
 

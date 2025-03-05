@@ -15,7 +15,7 @@ namespace LibaryManagementSystem.Controllers
             _courseService = courseService;
         }
 
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
             var courses = await _courseService.GetAllAsync();

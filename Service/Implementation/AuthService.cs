@@ -11,29 +11,36 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using DTO;
+using DataAccessLayer.Repository;
+using DataAcessLayer.Entities;
+using System.Reflection.Metadata.Ecma335;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 
 namespace Service.Implementation
 {
     public class AuthService : IAuthService
     {
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
-        public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, IMapper mapper)
+        public AuthService(UserManager<ApplicationUser> userManager,  SignInManager<ApplicationUser> signInManager, IConfiguration configuration, IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
             _mapper = mapper;
+
         }
 
         public async Task<string> RegisterAsync(RegistrationDto model)
         {
             var user = _mapper.Map<ApplicationUser>(model);
             var result = await _userManager.CreateAsync(user, model.Password);
-          
+
 
             if (!result.Succeeded)
                 return null; // Registration failed
@@ -49,6 +56,7 @@ namespace Service.Implementation
 
             return GenerateJwtToken(user);
         }
+
 
         private string GenerateJwtToken(ApplicationUser user)
         {
@@ -70,5 +78,10 @@ namespace Service.Implementation
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
+
+
+
     }
 }
+

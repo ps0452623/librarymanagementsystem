@@ -251,6 +251,8 @@ namespace DataAcessLayer.Migrations
 
                     b.HasIndex("BranchId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Students");
                 });
 
@@ -423,7 +425,15 @@ namespace DataAcessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DataAcessLayer.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Branch");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

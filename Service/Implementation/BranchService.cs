@@ -34,12 +34,12 @@ namespace Service.Implementation
 
         public async Task<BranchDto> GetByIdAsync(Guid id)
         {
-            var Branch = _branchRepository.GetByIdAsync(id);
-            return Branch == null ? null : _mapper.Map<BranchDto>(Branch);
+            var branch = await _branchRepository.GetByIdAsync(id); // ✅ Await the Task
+            return _mapper.Map<BranchDto>(branch); // ✅ Now mapping Branch -> BranchDto
         }
 
-       
-        
+
+
     }
 }
 
