@@ -49,7 +49,6 @@ namespace Service.Implementation
                 _ => query.OrderBy(u => u.FirstName) // Default sorting
             };
 
-            // Pagination
             int totalCount = await query.CountAsync();
             var users = await query
                 .Skip((request.PageNumber - 1) * request.PageSize)

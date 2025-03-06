@@ -27,9 +27,9 @@ namespace DTO
             [Compare("Password", ErrorMessage = "Passwords do not match")]
             public string ConfirmPassword { get; set; } = string.Empty;
 
-        [MinLength(10, ErrorMessage = "Phone must be at least 10 characters long")]
-        public string PhoneNumber { get; set; }
-        public string Role { get; set; } = string.Empty;
+            [MinLength(10, ErrorMessage = "Phone must be at least 10 characters long")]
+            public string PhoneNumber { get; set; } = string.Empty;
+            public string Role { get; set; } = string.Empty;
 
         }
     }

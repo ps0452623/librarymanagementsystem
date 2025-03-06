@@ -55,7 +55,7 @@ namespace LibraryManagement.Services.Implementations
         public async Task<StudentResponseDto> GetStudentDetailByIdAsync(Guid Id)
         {
             var student = await _studentRepository
-                .GetQuerable()
+                .GetQueryable()
                 .Include(s => s.User) // Join with AspNetUsers
                 .Include(s => s.Branch)         // Join with Branch
                     .ThenInclude(b => b.Course) // Join Branch with Course
