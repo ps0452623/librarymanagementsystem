@@ -25,6 +25,12 @@ namespace LibaryManagementSystem.MappingProfile
             CreateMap<BookRequestDto, Book>();
             CreateMap<Book, BookResponseDto>();
 
+
+            CreateMap<BookReservation,BookReservationResponseDto>().
+                ForMember(dest => dest.BookTitle, opt => opt.MapFrom(src => src.Book.Title))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FirstName));
+            CreateMap<BookReservationRequestDto, BookReservation>();
+
         }
     }
 }

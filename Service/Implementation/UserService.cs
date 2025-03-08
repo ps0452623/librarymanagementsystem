@@ -29,7 +29,7 @@ namespace Service.Implementation
         {
 
 
-            var query = _userRepository.GetQuerable();
+            var query = _userRepository.GetQueryable();
 
             // Apply Search Filter
             if (!string.IsNullOrEmpty(request.Search))
