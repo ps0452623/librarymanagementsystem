@@ -15,13 +15,14 @@ namespace DataAcessLayer
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Faculty> Faculties { get; set; }
-
         public DbSet<Designation> Designations { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Branch> Branches { get; set; }
         public DbSet<Book> Books { get; set; }
-
+        public DbSet<ReservationStatus> ReservationStatuses{ get; set; }
+        public DbSet<BookReservation> BookReservations { get; set; }
+       
     }
 }
 

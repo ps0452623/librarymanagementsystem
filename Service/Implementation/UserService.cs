@@ -29,7 +29,7 @@ namespace Service.Implementation
         {
 
 
-            var query = _userRepository.GetQuerable();
+            var query = _userRepository.GetQueryable();
 
             // Apply Search Filter
             if (!string.IsNullOrEmpty(request.Search))
@@ -49,7 +49,6 @@ namespace Service.Implementation
                 _ => query.OrderBy(u => u.FirstName) // Default sorting
             };
 
-            // Pagination
             int totalCount = await query.CountAsync();
             var users = await query
                 .Skip((request.PageNumber - 1) * request.PageSize)

@@ -24,17 +24,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IFacultyService, FacultyService>();
-
+builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IDesignationService, DesignationService>();
-
-
-
-
-
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IBranchService, BranchService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IBookReservationService, BookReservationService>();
 
 
 
