@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DataAcessLayer.Entities
 {
-    public class Designation
+    public class Designation: BaseEntity
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
+         public string Name { get; set; }
+
     }
 }

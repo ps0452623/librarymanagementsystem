@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DataAccessLayer.Repository;
+using DataAcessLayer.Data;
 using DataAcessLayer.Entities;
 using DTO;
 using Microsoft.EntityFrameworkCore;
@@ -14,14 +15,18 @@ namespace Service.Implementation
 {
     public class BookReservationService : IBookReservationService
     {
+        private readonly AppDbContext _context;
+
         private readonly IGenericRepository<BookReservation> _reserveRepository;
+        
         private readonly IMapper _mapper;
 
 
-        public BookReservationService(IGenericRepository<BookReservation> reserveRepository, IMapper mapper)
+        public BookReservationService(IGenericRepository<BookReservation> reserveRepository,AppDbContext context, IMapper mapper)
         {
             _reserveRepository = reserveRepository;
             _mapper = mapper;
+            _context = context;
         }
 
 
@@ -50,7 +55,7 @@ namespace Service.Implementation
             }
         }
 
-
+        //_________________Post________________________________________
         public async Task<BookReservationResponseDto> AddReservationAsync(BookReservationRequestDto request)
         {
             // Create a new reservation object
@@ -58,31 +63,44 @@ namespace Service.Implementation
             {
                 BookId = request.BookId,
                 UserId = request.UserId,
-                ReservationDate = DateTime.UtcNow,
+                CreatedOn= DateTime.UtcNow,
                 StatusId = Guid.Parse("48B956B1-56B8-400A-8158-28B58B6CBF82") // Pending Status
             };
 
             await _reserveRepository.AddAsync(reservation);
 
-            var addedReservation = await _reserveRepository.GetQueryable()
+
+
+
+            var addedReservation = await _reserveRepository.
+                GetQueryable()
                  .Include(r => r.Book)
                  .Include(r => r.User)
                   .FirstOrDefaultAsync(r => r.Id == reservation.Id);
 
 
-            var response = new BookReservationResponseDto
+            if (addedReservation == null)
             {
+                throw new Exception("Reservation not found after creation.");
+            }
+
+            return new BookReservationResponseDto
+            {
+
+                ReservationId = addedReservation.Id,
                 BookId = addedReservation.BookId,
                 BookTitle = addedReservation.Book?.Title,
                 UserName = addedReservation.User?.FirstName,
                 UserId = addedReservation.UserId,
                 Status = "Pending",
-                ReservationDate = addedReservation.ReservationDate
+                CreatedOn = addedReservation.CreatedOn
             };
 
-            return response;
+            
         
         }
+        //_____________________________Put___________________
+
 
         public async Task<string> UpdateReservationStatusAsync(Guid BookReservationId, Guid StatusId)
         {

@@ -1,4 +1,6 @@
-﻿using Microsoft.Identity.Client;
+﻿using DataAccessLayer;
+using DataAccessLayer.Data;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,9 +11,8 @@ using System.Threading.Tasks;
 
 namespace DataAcessLayer.Entities
 {
-   public class Student
+   public class Student : BaseEntity
     {
-        public Guid Id { get; set; }
         public string FatherName { get; set; } = string.Empty;
         public string MotherName { get; set; } = string.Empty;
         public string RollNumber { get; set; } = string.Empty;
@@ -23,4 +24,6 @@ namespace DataAcessLayer.Entities
         public ApplicationUser User { get; set; }
 
     }
+
+   
 }

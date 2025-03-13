@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DataAccessLayer.Data;
 using DataAccessLayer.Repository;
 using DataAcessLayer;
 using DataAcessLayer.Entities;
@@ -19,15 +20,11 @@ namespace LibraryManagement.Controllers
     public class StudentController : ControllerBase
     {
         private readonly IStudentService _studentService;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IWebHostEnvironment _webHostEnvironment;
-
-        public StudentController(IStudentService studentService, UserManager<ApplicationUser> userManager, IWebHostEnvironment webHostEnvironment)
+      
+        public StudentController(IStudentService studentService )
         {
             _studentService = studentService;
-            _userManager = userManager;
-            _webHostEnvironment = webHostEnvironment;
-
+           
         }
 
         [HttpGet("GetAll")]

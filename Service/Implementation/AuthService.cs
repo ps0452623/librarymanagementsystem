@@ -16,6 +16,8 @@ using DataAcessLayer.Entities;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using DataAccessLayer;
+using DataAccessLayer.Data;
 
 namespace Service.Implementation
 {

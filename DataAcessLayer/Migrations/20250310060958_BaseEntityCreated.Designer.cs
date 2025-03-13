@@ -4,6 +4,7 @@ using DataAcessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAcessLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250310060958_BaseEntityCreated")]
+    partial class BaseEntityCreated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,6 +190,9 @@ namespace DataAcessLayer.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<Guid>("ReservationId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("StatusId")
                         .HasColumnType("uniqueidentifier");
 
@@ -203,7 +209,7 @@ namespace DataAcessLayer.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex("ReservationId");
 
                     b.HasIndex("UserId");
 
@@ -584,9 +590,9 @@ namespace DataAcessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DataAcessLayer.Entities.ReservationStatus", "Status")
+                    b.HasOne("DataAcessLayer.Entities.ReservationStatus", "Reservation")
                         .WithMany()
-                        .HasForeignKey("StatusId")
+                        .HasForeignKey("ReservationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -598,7 +604,7 @@ namespace DataAcessLayer.Migrations
 
                     b.Navigation("Book");
 
-                    b.Navigation("Status");
+                    b.Navigation("Reservation");
 
                     b.Navigation("User");
                 });

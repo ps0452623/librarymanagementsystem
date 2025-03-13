@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Repository;
+﻿using DataAccessLayer.Data;
+using DataAccessLayer.Repository;
 using DataAcessLayer;
 using DTO;
 using Microsoft.EntityFrameworkCore;

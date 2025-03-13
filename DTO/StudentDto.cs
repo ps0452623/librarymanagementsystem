@@ -52,9 +52,7 @@ namespace DTO
         public string FatherName { get; set; } = string.Empty;
         public string MotherName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-
         public string PhoneNumber { get; set; } = string.Empty;
-
         public string RollNumber { get; set; } = string.Empty;
         public string Semester { get; set; } = string.Empty;
         public string EmergencyContactNumber { get; set; } = string.Empty;

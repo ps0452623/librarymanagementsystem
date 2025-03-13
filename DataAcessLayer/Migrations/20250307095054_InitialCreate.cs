@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-
-#nullable disable
+using DataAccessLayer.Data;
 
 namespace DataAcessLayer.Migrations
 {
