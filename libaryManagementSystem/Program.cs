@@ -18,36 +18,32 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin", builder =>
+    {
+        builder.AllowAnyOrigin() // Angular app URL
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 
+builder.Services.AddDbContext<AppDbContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IFacultyService, FacultyService>();
-
 builder.Services.AddScoped<IDesignationService, DesignationService>();
-
-
-
-
-
+builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IBranchService, BranchService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IUserService, UserService>();
-
-
-
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
-
+builder.Services.AddScoped<RoleManager<IdentityRole<Guid>>>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
-
-
-
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -66,36 +62,31 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = builder.Configuration["Jwt:Audience"]
         };
     });
-
-
 builder.Logging.AddConsole();
-
-
-
-// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
+app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-        options.RoutePrefix = string.Empty; // Opens Swagger at the root URL
+        options.RoutePrefix = string.Empty; 
     });
 
 }
 
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
 

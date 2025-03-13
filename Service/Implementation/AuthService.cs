@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using DTO;
+using System.Net.Mail;
 
 namespace Service.Implementation
 {
@@ -70,5 +71,31 @@ namespace Service.Implementation
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
+        public async Task<string> ForgotPasswordAsync(string email)
+        {
+            
+            var user =  await _userManager.FindByEmailAsync(email);
+            if (email == null)
+            {
+                throw new Exception("user not found!");
+            }
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            return token;
+
+        }
+        public async Task<bool> ResetPasswordAsync(string email, string token, string newPassword)
+        {              
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                throw new Exception("Invalid email.");
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+            return result.Succeeded;
+        }
     }
+
 }

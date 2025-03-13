@@ -20,7 +20,7 @@ namespace YourNamespace.Controllers
             _authService = authService;
         }
 
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegistrationDto model)
         {
             if (!ModelState.IsValid)  // ❌ Validation fails, return errors
@@ -35,7 +35,7 @@ namespace YourNamespace.Controllers
             return Ok(new { message = result });
         }
 
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
             var token = await _authService.LoginAsync(model);
@@ -45,6 +45,24 @@ namespace YourNamespace.Controllers
             return Ok(new { token });
         }
 
+        [HttpPost("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto email)
+        {
+            var token = await _authService.ForgotPasswordAsync(email.Email);
+            return Ok(new { Token = token, Message = "Use this token to reset your password." });
+
+        }
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPassword)
+        {
+            var isSuccess = await _authService.ResetPasswordAsync(resetPassword.Email, resetPassword.Token, resetPassword.NewPassword);
+            if (!isSuccess)
+            {
+                return BadRequest("Failed to reset password.");
+            }
+            return Ok("Password reset successfully.");
+        }
 
     }
+    
 }
