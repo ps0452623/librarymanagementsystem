@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace DataAcessLayer.Entities
 {
-   public  class ReservationStatus
+   public  class ReservationStatus :BaseEntity
     {
-        public Guid Id { get; set; }
         public string StatusName { get; set; }
     }
 }

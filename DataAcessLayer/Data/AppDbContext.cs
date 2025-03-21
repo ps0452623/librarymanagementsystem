@@ -1,4 +1,6 @@
-﻿using DataAcessLayer.Entities;
+﻿using DataAccessLayer;
+using DataAccessLayer.Data;
+using DataAcessLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAcessLayer
+namespace DataAcessLayer.Data
 {
     public class AppDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {

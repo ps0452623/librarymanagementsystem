@@ -31,7 +31,7 @@ namespace LibaryManagementSystem.Controllers
             var reservation = await _reservation.GetReservationByIdAsync(Id);
             if (reservation == null)
             {
-                return NotFound("Book Not Found");
+                return NotFound("reservation Not Found");
             }
             else
             {
@@ -39,7 +39,7 @@ namespace LibaryManagementSystem.Controllers
             }
         }
 
-        [HttpPut("{Id}/status/{statusId}")]
+        [HttpPut("{Id}/status/{statusId}")] 
         public async Task<IActionResult> UpdateReservationStatus( Guid Id, Guid statusId)
         {
             var existingReservation = await _reservation.GetReservationByIdAsync(Id);
@@ -58,6 +58,7 @@ namespace LibaryManagementSystem.Controllers
 
             return BadRequest("Failed to update reservation status");
         }
+
         [HttpPost("Create")]
         public async Task<IActionResult> Create([FromBody]BookReservationRequestDto request)
         {

@@ -17,10 +17,6 @@ namespace DataAccessLayer.Repository
         Task<bool> UpdateAsync(T entity);
         Task<bool> DeleteAsync(Guid id);
         IQueryable<T> GetQueryable();
-
-
-
-
-
+        
     }
 }

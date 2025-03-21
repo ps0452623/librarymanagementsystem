@@ -1,6 +1,8 @@
 
+using DataAccessLayer.Data;
 using DataAccessLayer.Repository;
 using DataAcessLayer;
+using DataAcessLayer.Data;
 using LibaryManagementSystem.MappingProfile;
 using LibraryManagement.Services.Implementations;
 using LibraryManagement.Services.Interfaces;
@@ -18,6 +20,15 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -70,11 +81,20 @@ builder.Logging.AddConsole();
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+
+
 
 
 // Configure the HTTP request pipeline.
@@ -90,6 +110,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseStaticFiles();

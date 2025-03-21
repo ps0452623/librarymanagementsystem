@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace DataAcessLayer.Entities
 {
-   public class Branch
+   public class Branch : BaseEntity
     {
-        public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public Guid CourseId { get; set; }
         public Course Course { get; set; }
