@@ -11,7 +11,7 @@ namespace Service.Interface
 {
     public interface IBookFilterService
     {
-        Task<(IEnumerable<BookFilterResponseDto> Books, int TotalCount)> GetFilteredBooks(BookFilterRequestDto filterRequest);
+        Task<(IEnumerable<BookSearchResponseDto> Books, int TotalCount)> GetFilteredBooks(BookSearchRequestDto filterRequest);
 
     }
 }

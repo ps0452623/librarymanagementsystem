@@ -10,7 +10,7 @@ namespace LibaryManagementSystem.Controllers
     public class RoleController : ControllerBase
     {
         private readonly RoleManager<IdentityRole<Guid>> _roleManager;
-        public RoleController (RoleManager<IdentityRole<Guid>> roleManager)
+        public RoleController(RoleManager<IdentityRole<Guid>> roleManager)
         {
             _roleManager = roleManager;
         }
@@ -20,5 +20,7 @@ namespace LibaryManagementSystem.Controllers
             var roles = _roleManager.Roles.Select(r => new { r.Id, r.Name }).ToList();
             return Ok(roles);
         }
-        }
+    }
 }
+    
+

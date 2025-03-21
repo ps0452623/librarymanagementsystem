@@ -34,11 +34,12 @@ namespace Service.Implementation
 
         public async Task<CourseDto> GetByIdAsync(Guid id)
         {
-            var Course = _courseRepository.GetByIdAsync(id);
-            return Course == null ? null : _mapper.Map<CourseDto>(Course);
+            var course = await _courseRepository.GetByIdAsync(id); // Ensure this returns Course, not Task<Course>
+            return _mapper.Map<CourseDto>(course);
         }
 
-      
+
+
     }
 }
 

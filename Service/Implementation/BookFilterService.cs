@@ -26,7 +26,7 @@ namespace Service.Implementation
             _mapper = mapper;
             _branchRepository = branchRepository;
         }
-        public async Task<(IEnumerable<BookFilterResponseDto> Books, int TotalCount)> GetFilteredBooks(BookFilterRequestDto filterRequest)
+        public async Task<(IEnumerable<BookSearchResponseDto> Books, int TotalCount)> GetFilteredBooks(BookSearchRequestDto filterRequest)
         {
             var query = _repository.GetQueryable();
 
@@ -54,9 +54,9 @@ namespace Service.Implementation
                 query = query.Where(b => b.YearPublished == filterRequest.YearPublished);
             }
             // Branch Filter - 
-            if (!string.IsNullOrEmpty(filterRequest.Branch))
+            if (!string.IsNullOrEmpty(filterRequest.BranchName))
             {
-                query = query.Where(b => b.Branch != null && b.Branch.Name.Contains(filterRequest.Branch));
+                query = query.Where(b => b.Branch != null && b.Branch.Name.Contains(filterRequest.BranchName));
             }
 
 
@@ -80,7 +80,7 @@ namespace Service.Implementation
             {
                 return (null, 0); // No books found
             }
-            var bookDtos = _mapper.Map<IEnumerable<BookFilterResponseDto>>(books);
+            var bookDtos = _mapper.Map<IEnumerable<BookSearchResponseDto>>(books);
 
             return (bookDtos, totalCount);
         }

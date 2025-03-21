@@ -16,8 +16,8 @@ namespace LibaryManagementSystem.Controllers
             _branchService = branchService;
      
        }
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAllAsync()
         {
             var Branches = await _branchService.GetAllAsync();
             return Ok(Branches);
