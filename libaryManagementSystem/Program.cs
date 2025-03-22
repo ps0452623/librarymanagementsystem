@@ -29,7 +29,6 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
-// Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -47,7 +46,7 @@ builder.Services.AddScoped<IBookReservationService, BookReservationService>();
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>() 
+builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 

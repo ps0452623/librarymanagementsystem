@@ -41,7 +41,7 @@ export const MENU = [
     {
         name: 'Blank',
         iconClasses: 'fas fa-file',
-        path: ['/blank']
+        path: ['/faculty/books']
     },
     {
         name: 'Main Menu',

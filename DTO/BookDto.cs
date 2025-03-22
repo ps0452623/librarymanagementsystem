@@ -17,7 +17,7 @@ namespace DTO
         public string Author { get; set; }
         [Required(ErrorMessage = "Enter Publisher Name!")]
         public string Publisher { get; set; }
-        public string Genere { get; set; }
+        public string Genre { get; set; }
         [Required(ErrorMessage = "ISBN Number is Necessary!")]
         [MinLength(13, ErrorMessage = "ISBN code must be of 13 Digits")]
         public string ISBN { get; set; }
@@ -27,6 +27,10 @@ namespace DTO
         [Required(ErrorMessage = "Book Shelf Number is Necessary!")]
         public int BookShelfNumber { get; set; }
         public IFormFile Picture { get; set; }
+        [Required(ErrorMessage ="Branch is Required")]
+        public Guid BranchID { get; set; }
+
+
     }
     public class BookResponseDto
     {
@@ -40,6 +44,9 @@ namespace DTO
         public int CopiesAvailable { get; set; }
         public int BookShelfNumber { get; set; }
         public string Picture { get; set; }
+        public string BranchName { get; set; }
+
+
 
     }
 }
