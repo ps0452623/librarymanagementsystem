@@ -47,6 +47,8 @@ import {LoadingComponent} from './components/loading/loading.component';
 import {OverlayLoadingComponent} from './components/overlay-loading/overlay-loading.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import { RegisterComponent } from '@modules/register/register.component';
+import { AddBookComponent } from './pages/student/book/add-book/add-book.component';
+import { BookListComponent } from './pages/student/book/book-list/book-list.component';
 
 registerLocaleData(localeEn, 'en-EN');
 
@@ -80,7 +82,9 @@ registerLocaleData(localeEn, 'en-EN');
         SmallBoxComponent,
         ContentHeaderComponent,
         LoadingComponent,
-        OverlayLoadingComponent
+        OverlayLoadingComponent,
+        AddBookComponent,
+        BookListComponent,
     ],
     imports: [
         ProfabricComponentsModule,
