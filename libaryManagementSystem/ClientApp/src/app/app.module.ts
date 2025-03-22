@@ -47,8 +47,8 @@ import {LoadingComponent} from './components/loading/loading.component';
 import {OverlayLoadingComponent} from './components/overlay-loading/overlay-loading.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import { RegisterComponent } from '@modules/register/register.component';
-import { AddBookComponent } from './pages/student/book/add-book/add-book.component';
-import { BookListComponent } from './pages/student/book/book-list/book-list.component';
+import { BookListComponent } from './pages/Faculty/Books/booklist/booklist.component';
+import { BookAddComponent } from '@pages/Faculty/Books/book-add/bookadd.component';
 
 registerLocaleData(localeEn, 'en-EN');
 
@@ -83,8 +83,8 @@ registerLocaleData(localeEn, 'en-EN');
         ContentHeaderComponent,
         LoadingComponent,
         OverlayLoadingComponent,
-        AddBookComponent,
         BookListComponent,
+        BookAddComponent
     ],
     imports: [
         ProfabricComponentsModule,

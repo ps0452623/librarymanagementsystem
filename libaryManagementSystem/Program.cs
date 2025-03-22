@@ -46,7 +46,7 @@ builder.Services.AddScoped<IBookReservationService, BookReservationService>();
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>() 
+builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 

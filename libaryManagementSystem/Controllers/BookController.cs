@@ -1,6 +1,7 @@
 ﻿using DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Service.Implementation;
 using Service.Interface;
 
 namespace LibaryManagementSystem.Controllers
@@ -76,6 +77,16 @@ namespace LibaryManagementSystem.Controllers
 
             return ("Book Not Found or Could Not Be Deleted");
         }
+        [HttpGet("Search-Books")]
+        public async Task<IActionResult> GetFilteredBooks([FromQuery] BookSearchRequestDto searchRequestDto)
+        {
+            var (books, totalCount) = await _bookService.GetFilteredBooks(searchRequestDto);
 
+            return Ok(new
+            {
+                TotalCount = totalCount,
+                Books = books
+            });
+        }
     }
 }

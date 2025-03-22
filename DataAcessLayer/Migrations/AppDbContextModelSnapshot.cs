@@ -117,6 +117,9 @@ namespace DataAcessLayer.Migrations
                     b.Property<int>("BookShelfNumber")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("CopiesAvailable")
                         .HasColumnType("int");
 
@@ -126,7 +129,7 @@ namespace DataAcessLayer.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Genere")
+                    b.Property<string>("Genre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -162,6 +165,8 @@ namespace DataAcessLayer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
 
                     b.ToTable("Books");
                 });
@@ -574,6 +579,17 @@ namespace DataAcessLayer.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("DataAcessLayer.Entities.Book", b =>
+                {
+                    b.HasOne("DataAcessLayer.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
                 });
 
             modelBuilder.Entity("DataAcessLayer.Entities.BookReservation", b =>

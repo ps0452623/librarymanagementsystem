@@ -11,13 +11,15 @@ import {NonAuthGuard} from '@guards/non-auth.guard';
 import {ForgotPasswordComponent} from '@modules/forgot-password/forgot-password.component';
 import {RecoverPasswordComponent} from '@modules/recover-password/recover-password.component';
 import {SubMenuComponent} from '@pages/main-menu/sub-menu/sub-menu.component';
+import { BookListComponent } from '@pages/Faculty/Books/booklist/booklist.component';
+import { BookAddComponent } from '@pages/Faculty/Books/book-add/bookadd.component';
 
 const routes: Routes = [
     {
         path: '',
         component: MainComponent,
-        canActivate: [AuthGuard],
-        canActivateChild: [AuthGuard],
+        // canActivate: [AuthGuard],
+        // canActivateChild: [AuthGuard],
         children: [
             {
                 path: 'profile',
@@ -38,6 +40,14 @@ const routes: Routes = [
             {
                 path: '',
                 component: DashboardComponent
+            },
+            {
+                path: 'faculty/books',
+                component: BookListComponent
+            },
+            {
+                path: 'faculty/books-add',
+                component: BookAddComponent
             }
         ]
     },
@@ -61,6 +71,7 @@ const routes: Routes = [
         component: RecoverPasswordComponent,
         canActivate: [NonAuthGuard]
     },
+    
     {path: '**', redirectTo: ''}
 ];
 

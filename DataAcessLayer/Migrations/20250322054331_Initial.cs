@@ -1,11 +1,12 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using DataAccessLayer.Data;
+
+#nullable disable
 
 namespace DataAcessLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -54,31 +55,17 @@ namespace DataAcessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Books",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Publisher = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Genere = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ISBN = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    YearPublished = table.Column<int>(type: "int", nullable: false),
-                    CopiesAvailable = table.Column<int>(type: "int", nullable: false),
-                    BookShelfNumber = table.Column<int>(type: "int", nullable: false),
-                    Picture = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Books", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Courses",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -90,7 +77,13 @@ namespace DataAcessLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -102,7 +95,13 @@ namespace DataAcessLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StatusName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    StatusName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -221,7 +220,13 @@ namespace DataAcessLayer.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -240,7 +245,13 @@ namespace DataAcessLayer.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DesignationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    DesignationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -260,6 +271,75 @@ namespace DataAcessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Books",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Publisher = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Genre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ISBN = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    YearPublished = table.Column<int>(type: "int", nullable: false),
+                    CopiesAvailable = table.Column<int>(type: "int", nullable: false),
+                    BookShelfNumber = table.Column<int>(type: "int", nullable: false),
+                    Picture = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Books", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Books_Branches_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Students",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FatherName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MotherName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RollNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Semester = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmergencyContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Students", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Students_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Students_Branches_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BookReservations",
                 columns: table => new
                 {
@@ -267,8 +347,12 @@ namespace DataAcessLayer.Migrations
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BookId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StatusId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ReservationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ReservationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -286,39 +370,9 @@ namespace DataAcessLayer.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BookReservations_ReservationStatuses_ReservationId",
-                        column: x => x.ReservationId,
+                        name: "FK_BookReservations_ReservationStatuses_StatusId",
+                        column: x => x.StatusId,
                         principalTable: "ReservationStatuses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Students",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FatherName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MotherName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RollNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Semester = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EmergencyContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Students", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Students_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Students_Branches_BranchId",
-                        column: x => x.BranchId,
-                        principalTable: "Branches",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -368,14 +422,19 @@ namespace DataAcessLayer.Migrations
                 column: "BookId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookReservations_ReservationId",
+                name: "IX_BookReservations_StatusId",
                 table: "BookReservations",
-                column: "ReservationId");
+                column: "StatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookReservations_UserId",
                 table: "BookReservations",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Books_BranchId",
+                table: "Books",
+                column: "BranchId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Branches_CourseId",

@@ -13,10 +13,10 @@ namespace Service.Interface
 
         Task<string> LoginAsync(LoginDto model);
         Task<string> RegisterAsync(RegistrationDto model);
-
-        
+        Task<string> ForgotPasswordAsync(string email);
+        Task<bool> ResetPasswordAsync(string email, string token, string newPassword);
 
     }
-  }
+}
 
 

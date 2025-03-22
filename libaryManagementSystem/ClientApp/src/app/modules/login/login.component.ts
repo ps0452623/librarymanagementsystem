@@ -30,11 +30,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.renderer.addClass(document.body, 'login-page'); 
 
         this.loginForm = new UntypedFormGroup({
-            email: new UntypedFormControl(null, [
+            email: new UntypedFormControl('sakshi@gmail.com', [
                 Validators.required,
                 Validators.email 
             ]),
-            password: new UntypedFormControl(null, [
+            password: new UntypedFormControl('Sakshi@123', [
                 Validators.required,
                 Validators.minLength(6)
             ])
@@ -42,8 +42,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
    async loginByAuth() {
-    console.log('Login button clicked');  // Check if function is called
-    debugger;
     
     if (this.loginForm.valid) {
         this.isAuthLoading = true;

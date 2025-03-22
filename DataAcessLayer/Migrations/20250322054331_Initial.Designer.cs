@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAcessLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250310060958_BaseEntityCreated")]
-    partial class BaseEntityCreated
+    [Migration("20250322054331_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -120,6 +120,9 @@ namespace DataAcessLayer.Migrations
                     b.Property<int>("BookShelfNumber")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("CopiesAvailable")
                         .HasColumnType("int");
 
@@ -129,7 +132,7 @@ namespace DataAcessLayer.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Genere")
+                    b.Property<string>("Genre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -166,6 +169,8 @@ namespace DataAcessLayer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BranchId");
+
                     b.ToTable("Books");
                 });
 
@@ -190,9 +195,6 @@ namespace DataAcessLayer.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("ReservationId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("StatusId")
                         .HasColumnType("uniqueidentifier");
 
@@ -209,7 +211,7 @@ namespace DataAcessLayer.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.HasIndex("ReservationId");
+                    b.HasIndex("StatusId");
 
                     b.HasIndex("UserId");
 
@@ -582,6 +584,17 @@ namespace DataAcessLayer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("DataAcessLayer.Entities.Book", b =>
+                {
+                    b.HasOne("DataAcessLayer.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+                });
+
             modelBuilder.Entity("DataAcessLayer.Entities.BookReservation", b =>
                 {
                     b.HasOne("DataAcessLayer.Entities.Book", "Book")
@@ -590,9 +603,9 @@ namespace DataAcessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DataAcessLayer.Entities.ReservationStatus", "Reservation")
+                    b.HasOne("DataAcessLayer.Entities.ReservationStatus", "Status")
                         .WithMany()
-                        .HasForeignKey("ReservationId")
+                        .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -604,7 +617,7 @@ namespace DataAcessLayer.Migrations
 
                     b.Navigation("Book");
 
-                    b.Navigation("Reservation");
+                    b.Navigation("Status");
 
                     b.Navigation("User");
                 });
