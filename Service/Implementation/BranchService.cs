@@ -4,6 +4,7 @@ using DataAcessLayer.Entities;
 using DTO;
 using LibraryManagement.Services.Interfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using Service.Interface;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,13 @@ namespace Service.Implementation
             return _mapper.Map<BranchDto>(branch); // ✅ Now mapping Branch -> BranchDto
         }
 
+        public async Task<IEnumerable<BranchDto>> GetBranchesByCourse(Guid courseId)
+        {
+            var allBranches = await _branchRepository.GetAllAsync();
+            var filteredBranches = allBranches.Where(b => b.CourseId == courseId).ToList();
+
+            return _mapper.Map <IEnumerable<BranchDto>>(filteredBranches);
+        }
 
 
     }

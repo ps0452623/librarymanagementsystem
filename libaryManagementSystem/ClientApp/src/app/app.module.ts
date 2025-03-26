@@ -49,6 +49,7 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import { RegisterComponent } from '@modules/register/register.component';
 import { BookListComponent } from './pages/Faculty/Books/booklist/booklist.component';
 import { BookAddComponent } from '@pages/Faculty/Books/book-add/bookadd.component';
+import { UpdateBookComponent } from './pages/Faculty/Books/update-book/update-book.component';
 
 registerLocaleData(localeEn, 'en-EN');
 
@@ -84,7 +85,8 @@ registerLocaleData(localeEn, 'en-EN');
         LoadingComponent,
         OverlayLoadingComponent,
         BookListComponent,
-        BookAddComponent
+        
+       
     ],
     imports: [
         ProfabricComponentsModule,
@@ -94,13 +96,15 @@ registerLocaleData(localeEn, 'en-EN');
         AppRoutingModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
+        BookAddComponent,
+        UpdateBookComponent,
         ToastrModule.forRoot({
             timeOut: 3000,
             positionClass: 'toast-top-right',
             preventDuplicates: true
         }),
         FontAwesomeModule,
-        RegisterComponent 
+        RegisterComponent,
     ],
     providers: [provideHttpClient(withInterceptorsFromDi())],
     bootstrap: [AppComponent]

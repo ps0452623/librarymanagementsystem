@@ -7,7 +7,10 @@ using AutoMapper;
 using DataAccessLayer.Repository;
 using DataAcessLayer.Entities;
 using DTO;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Service.Interface;
 
 namespace Service.Implementation
@@ -17,13 +20,33 @@ namespace Service.Implementation
         private readonly IGenericRepository<Book> _repository;
         private readonly IMapper _mapper;
         private readonly IGenericRepository<Branch> _branchRepository;
-
-        public BookService(IGenericRepository<Book> bookrepository, IMapper mapper, IGenericRepository<Branch> branchRepository)
+        private readonly IHostEnvironment _hostEnvironment;
+        public BookService(IGenericRepository<Book> bookrepository, IMapper mapper, IGenericRepository<Branch> branchRepository , IHostEnvironment hostEnvironment)
         {
             _repository = bookrepository;
             _mapper = mapper;
             _branchRepository = branchRepository;
+            _hostEnvironment = hostEnvironment;
         }
+
+        public string SaveBookPicture(IFormFile picture)
+        {
+            if (picture == null || picture.Length == 0) return null;
+            var uploadsFolder = Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot", "BookImages");
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+            var uniqueFileName = $"{Guid.NewGuid()}_{Path.GetFileName(picture.FileName)}";
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                picture.CopyTo(fileStream);
+            }
+            return $"/BookImages/{uniqueFileName}";
+        }
+
+
 
         public IQueryable<BookResponseDto> GetBookQuery()
         {
@@ -64,78 +87,60 @@ namespace Service.Implementation
             return await GetBookQuery().FirstOrDefaultAsync(b => b.Id == id);
 
         }
-        public async Task<string> Create(BookRequestDto bookRequestDto)
+        public async Task Create(BookRequestDto bookRequestDto)
         {           
             var newBook = _mapper.Map<Book>(bookRequestDto);    
             newBook.Id = Guid.NewGuid();
-
             if(bookRequestDto.Picture != null && bookRequestDto.Picture.Length > 0 )
             {
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/BookImages");
-                if (!Directory.Exists(uploadsFolder))
-                {
-                    Directory.CreateDirectory(uploadsFolder);
-                }
-
-
-                var uniqueFileName = $"{Guid.NewGuid()}_{bookRequestDto.Picture.FileName}";
-                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await bookRequestDto.Picture.CopyToAsync(fileStream);
-                }
-                newBook.Picture = $"/BookImages/{uniqueFileName}"; // Relative path
+                newBook.Picture = SaveBookPicture(bookRequestDto.Picture);
+            }
+            try { 
+            var books = await _repository.AddAsync(newBook);
+               
 
             }
-
-            var books = await _repository.AddAsync(newBook);
-            return "Book Created Sucessfully";
-
+            catch (Exception)
+            {
+                throw;
+            }
         }
-        public async Task<string> Update(Guid id, BookRequestDto bookRequestDto)
+        public async Task Update(Guid id, BookRequestDto bookRequestDto)
         {
             var existingBook = await _repository.GetByIdAsync(id);
             if (existingBook == null)
             {
-                return "Book Not Found";
+                throw new KeyNotFoundException("Book not found");
             }
 
             _mapper.Map(bookRequestDto, existingBook);
             if (bookRequestDto.Picture != null && bookRequestDto.Picture.Length > 0)
             {
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/BookImages");
-                if (!Directory.Exists(uploadsFolder))
-                {
-                    Directory.CreateDirectory(uploadsFolder);
-                }
-                var uniqueFileName = $"{Guid.NewGuid()}_{bookRequestDto.Picture.FileName}";
-                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await bookRequestDto.Picture.CopyToAsync(fileStream);
-                }
+                // Delete old picture if it exists
                 if (!string.IsNullOrEmpty(existingBook.Picture))
                 {
-                    var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", existingBook.Picture.TrimStart('/'));
+                    var oldFilePath = Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot", existingBook.Picture.TrimStart('/'));
                     if (File.Exists(oldFilePath))
                     {
                         File.Delete(oldFilePath);
                     }
                 }
 
-                existingBook.Picture = $"/BookImages/{uniqueFileName}"; // Update new picture path
+                existingBook.Picture = SaveBookPicture(bookRequestDto.Picture); // Update new picture
             }
+          
 
             await _repository.UpdateAsync(existingBook);
-            return "Updated";
+
+            return;
         }
-        public async Task<string> Delete(Guid id)
+        public async Task Delete(Guid id)
         {
             var book = await _repository.GetByIdAsync(id);
             if (book == null)
             {
-                return "Book does not Exist";
+                throw new KeyNotFoundException("Book not found");
+
 
             }
             if (!string.IsNullOrEmpty(book.Picture))
@@ -147,8 +152,8 @@ namespace Service.Implementation
                 }
             }
 
-           var books =  await _repository.DeleteAsync(id);
-            return "Deleted";       
+            await _repository.DeleteAsync(id);
+            return;
     }
         public async Task<(IEnumerable<BookSearchResponseDto> Books, int TotalCount)> GetFilteredBooks(BookSearchRequestDto filterRequest)
         {

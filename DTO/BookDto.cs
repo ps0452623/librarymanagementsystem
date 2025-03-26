@@ -26,7 +26,7 @@ namespace DTO
         public int CopiesAvailable { get; set; }
         [Required(ErrorMessage = "Book Shelf Number is Necessary!")]
         public int BookShelfNumber { get; set; }
-        public IFormFile Picture { get; set; }
+        public IFormFile? Picture { get; set; }
         [Required(ErrorMessage ="Branch is Required")]
         public Guid BranchID { get; set; }
 
