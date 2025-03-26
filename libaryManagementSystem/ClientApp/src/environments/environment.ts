@@ -3,6 +3,6 @@ export const environment = {
   GA_ID: null,
   
   production: false,
-  baseUrl: 'https://localhost:7028/api' 
-
+  baseUrl: 'https://localhost:7028/api',
+ imageUploadUrl: 'https://localhost:7028'
 };

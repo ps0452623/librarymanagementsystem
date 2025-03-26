@@ -45,6 +45,7 @@
         "@ngx-env/core": "16.1.3",
         "@profabric/angular-components": "0.2.5-beta.5",
         "@schematics/angular": "18.0.1",
+        "alertifyjs": "^1.14.0",
         "core-js": "3.37.1",
         "firebase": "10.12.1",
         "luxon": "3.4.4",

@@ -12,7 +12,8 @@ namespace Service.Interface
     {
         Task<IEnumerable<BranchDto>> GetAllAsync();
         Task<BranchDto> GetByIdAsync(Guid Id);
-       
+        Task<IEnumerable<BranchDto>> GetBranchesByCourse(Guid courseId);
+
 
     }
 }

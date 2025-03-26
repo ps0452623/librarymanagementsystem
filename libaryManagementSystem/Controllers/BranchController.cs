@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DataAcessLayer.Entities;
+using DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Service.Implementation;
 using Service.Interface;
 
@@ -14,8 +17,8 @@ namespace LibaryManagementSystem.Controllers
         public BranchController(IBranchService branchService)
         {
             _branchService = branchService;
-     
-       }
+
+        }
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -31,6 +34,25 @@ namespace LibaryManagementSystem.Controllers
             return Ok(branch);
         }
 
+        [HttpGet("GetByCourse/{courseId}")]
+        public async Task<ActionResult<IEnumerable<BranchDto>>> GetBranchesByCourse(Guid courseId)
+        {
+            // Call the service method
+            var branches = await _branchService.GetBranchesByCourse(courseId);
 
+            // If no branches found, return 404 Not Found
+            if (branches == null )
+            {
+                return NotFound(new { Message = "No branches found for the selected course." });
+            }
+
+            // Return the list of branches with 200 OK
+            return Ok(branches);
+        }
+
+
+        }
+
+
+       
     }
-}

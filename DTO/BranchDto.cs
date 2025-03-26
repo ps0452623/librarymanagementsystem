@@ -14,6 +14,7 @@ namespace DTO
 
         [Required(ErrorMessage = "BranchName is required")]
         public string Name { get; set; } = string.Empty;
+        public Guid CourseId { get; set; }
        
     }
 }
