@@ -93,6 +93,6 @@ test-reports/
 *.7z
 
 # Optional: Ignore generated Swagger files
-wwwroot/swagger/
+wwwroot/
 swagger.json
 swagger-ui/

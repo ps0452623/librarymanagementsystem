@@ -1,6 +1,7 @@
 ﻿using DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Service.Implementation;
 using Service.Interface;
 
@@ -29,51 +30,60 @@ namespace LibaryManagementSystem.Controllers
             {
                 return NotFound("Book Not Found");
             }
-            else
-            {
-                return Ok(book);
-            }
+            return Ok(book);
         }
+
         [HttpPost("Add")]
 
-        public async Task<string> Add([FromForm]BookRequestDto bookRequestDto)
+        public async Task<IActionResult> Add([FromForm] BookRequestDto bookRequestDto)
         {
-             if(bookRequestDto == null)
+            if (ModelState.IsValid)
             {
-                return "Invalid Data";
+                try
+                {
+                    await _bookService.Create(bookRequestDto);
+                    return Ok(new { message="Book Added Successfully. "});
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
-             var result = await _bookService.Create(bookRequestDto);
-            if (result == "Created") ;
-            return result;
+            return BadRequest(ModelState);
         }
         [HttpPut("{id}/Update")]
-        public async Task<string> Update(Guid id,[FromForm] BookRequestDto bookRequestDto )
+        public async Task<IActionResult> Update(Guid id, [FromForm] BookRequestDto bookRequestDto)
         {
-            if (bookRequestDto == null)
+            if (!ModelState.IsValid)
             {
-                return "Invalid book data";
+                return BadRequest(ModelState);  
             }
-            var existingBook = await _bookService.GetById(id);
-            if (existingBook == null)
-            {
-                return "Book Not Found";
-            }
-            var book = await _bookService.Update(id, bookRequestDto);
-            if (book == "Updated")
-            {
-                return "Book Updated Sucessfully";
-            }
-            return book;
-        }
-        [HttpDelete("{id}/Delete")]
-        public async Task<string> Delete(Guid id)
-        {
-            var result = await _bookService.Delete(id);
 
-            if (result == "Deleted")  
+            try
             {
-                return ("Book Deleted Successfully");
+                await _bookService.Update(id, bookRequestDto);
+                return Ok(new { message = "Book updated successfully" });
             }
+
+            catch (Exception)
+            {
+
+
+                return StatusCode(500, "An error occurred while updating the book");
+            }
+        }
+
+        [HttpDelete("{id}/Delete")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            try
+            {
+                await _bookService.Delete(id);
+                return Ok(new { message = "Book deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while deleting the book.", details = ex.Message });
 
             return ("Book Not Found or Could Not Be Deleted");
         }

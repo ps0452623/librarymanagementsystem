@@ -1,28 +1,186 @@
 <div class="container mt-4">
-    <h2>Books Add</h2>
+    <h2>Add a Book</h2>
     <a routerLink="/faculty/books" class="btn btn-primary mb-3">Back</a>
-    <table class="table">
-        <thead class="table-dark">
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>John Doe</td>
-                <td>johndoeexample.com</td>
-                <td>Admin</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Jane Smith</td>
-                <td>janesmithm</td>
-                <td>Editor</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+  
+    <!-- Form to Add Book -->
+    <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+         <!-- Course Selection Dropdown -->
+    <div class="form-group">
+      <label for="Course">Course</label>
+      <select
+        id="course"
+        class="form-control"
+        formControlName="CourseId"
+        required
+        (change)="onCourseChange($event)"
+      >
+        <option value="" disabled>Select a Course</option>
+        <option *ngFor="let course of courses$ | async" [value]="course.id">{{ course.name }}</option>
+      </select>
+      <div *ngIf="bookForm.get('CourseId').invalid && bookForm.get('CourseId').touched" class="text-danger">
+        Course is required.
+      </div>
+    </div>
+      <!-- Branch Selection Dropdown (Based on selected course) -->
+      <div class="form-group" *ngIf="branches$ | async as branchList">
+        <label for="Branch">Branch</label>
+        <select
+          id="branch"
+          class="form-control"
+          formControlName="BranchId"
+          required
+        >
+          <option value="" disabled>Select a Branch</option>
+          <option *ngFor="let branch of branches$ | async" [value]="branch.id">{{ branch.name }}</option>
+        </select>
+        <div *ngIf="bookForm.get('BranchId').invalid && bookForm.get('BranchId').touched" class="text-danger">
+          Branch is required.
+        </div>
+      </div>
+      <!-- Title Field -->
+      <div class="form-group">
+        <label for="Title">Title</label>
+        <input
+          type="text"
+          id="Title"
+          class="form-control"
+          formControlName="Title"
+          required
+        />
+        <div *ngIf="bookForm.get('Title').invalid && bookForm.get('Title').touched" class="text-danger">
+          Title is required.
+        </div>
+      </div>
+  
+      <!-- Author Field -->
+      <div class="form-group">
+        <label for="Author">Author</label>
+        <input
+          type="text"
+          id="author"
+          class="form-control"
+          formControlName="Author"
+          required
+        />
+        <div *ngIf="bookForm.get('Author').invalid && bookForm.get('Author').touched" class="text-danger">
+          Author is required.
+        </div>
+      </div>
+  
+      <!-- Publisher Field -->
+      <div class="form-group">
+        <label for="Publisher">Publisher</label>
+        <input
+          type="text"
+          id="publisher"
+          class="form-control"
+          formControlName="Publisher"
+          required
+        />
+        <div *ngIf="bookForm.get('Publisher').invalid && bookForm.get('Publisher').touched" class="text-danger">
+          Publisher is required.
+        </div>
+      </div>
+  
+      <!-- Genre Field -->
+      <div class="form-group">
+        <label for="Genre">Genre</label>
+        <input
+          type="text"
+          id="genre"
+          class="form-control"
+          formControlName="Genre"
+          required
+        />
+        <div *ngIf="bookForm.get('Genre').invalid && bookForm.get('Genre').touched" class="text-danger">
+          Genre is required.
+        </div>
+      </div>
+  
+      <!-- ISBN Field -->
+      <div class="form-group">
+        <label for="isbn">ISBN</label>
+        <input
+          type="text"
+          id="isbn"
+          class="form-control"
+          formControlName="ISBN"
+          required
+        />
+        <div *ngIf="bookForm.get('ISBN').invalid && bookForm.get('ISBN').touched" class="text-danger">
+          ISBN is required.
+        </div>
+      </div>
+  
+      <!-- Year Published Field -->
+      <div class="form-group">
+        <label for="YearPublished">Year Published</label>
+        <input
+          type="number"
+          id="yearPublished"
+          class="form-control"
+          formControlName="YearPublished"
+          required
+        />
+        <div *ngIf="bookForm.get('YearPublished').invalid && bookForm.get('YearPublished').touched" class="text-danger">
+          Year Published is required.
+        </div>
+      </div>
+  
+      <!-- Copies Available Field -->
+      <div class="form-group">
+        <label for="CopiesAvailable">Copies Available</label>
+        <input
+          type="number"
+          id="copiesAvailable"
+          class="form-control"
+          formControlName="CopiesAvailable"
+          required
+        />
+        <div *ngIf="bookForm.get('CopiesAvailable').invalid && bookForm.get('CopiesAvailable').touched" class="text-danger">
+          Copies Available is required.
+        </div>
+      </div>
+  
+      <!-- Book Shelf Number Field -->
+      <div class="form-group">
+        <label for="BookShelfNumber">Book Shelf Number</label>
+        <input
+          type="number"
+          id="bookShelfNumber"
+          class="form-control"
+          formControlName="BookShelfNumber"
+          required
+        />
+        <div *ngIf="bookForm.get('BookShelfNumber').invalid && bookForm.get('BookShelfNumber').touched" class="text-danger">
+          Book Shelf Number is required.
+        </div>
+      </div>
+  
+      
+      <!-- Picture URL Field -->
+      <div class="form-group">
+        <label for="Picture">Add Picture</label>
+        <input
+          type="file"
+          id="picture"
+          class="form-control"
+          formControlName="Picture"
+          (change)="onFileSelected($event)"
+
+        />
+      </div>
+      
+  
+      
+  
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-success" [disabled]="!bookForm.valid">
+        Add Book
+      </button>
+      <button type="button" class="btn btn-secondary" routerLink="/faculty/books">
+        Cancel
+      </button>
+    </form>
+  </div>
+  

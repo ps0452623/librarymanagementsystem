@@ -14,9 +14,9 @@ namespace Service.Interface
         IQueryable<BookResponseDto> GetBookQuery();
         Task<IEnumerable<BookResponseDto>> GetAll();
         Task<BookResponseDto> GetById(Guid id);
-        Task<string> Create(BookRequestDto bookRequestDto);
-        Task<string> Update(Guid id, BookRequestDto bookRequestDto);
-        Task<string> Delete(Guid id);
+        Task Create(BookRequestDto bookRequestDto);
+        Task Update(Guid id, BookRequestDto bookRequestDto);
+        Task Delete(Guid id);
         Task<(IEnumerable<BookSearchResponseDto> Books, int TotalCount)> GetFilteredBooks(BookSearchRequestDto filterRequest);
 
 

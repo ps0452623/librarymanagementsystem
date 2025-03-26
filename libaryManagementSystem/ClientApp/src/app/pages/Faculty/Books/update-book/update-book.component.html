@@ -1,0 +1,110 @@
+
+<div class="container mt-4">
+    <h2>Update Book</h2>
+    
+    <!-- Book Update Form -->
+    <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+      
+      <div class="form-group">
+        <label for="course">Course</label>
+        <select id="course" class="form-control" formControlName="Course" (change)="onCourseChange($event)">
+          <option value="branch" disabled>Select Course</option>
+          <option *ngFor="let course of courses$ | async" [value]="course.id">{{ course.name }}</option>
+        </select>
+        <div *ngIf="bookForm.controls['CourseId'].invalid && bookForm.controls['CourseId'].touched" class="text-danger">
+          Please select a course.
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="branch">Branch</label>
+        <select id="branch" class="form-control" formControlName="BranchId">
+          <option value="branch" disabled>Select Branch</option>
+          <option *ngFor="let branch of branches$ | async" [value]="branch.id">{{ branch.name }}</option>
+        </select>
+        <div *ngIf="bookForm.controls['BranchId'].invalid && bookForm.controls['BranchId'].touched" class="text-danger">
+          Please select a branch.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="Title">Title</label>
+        <input type="text" id="Title" class="form-control" formControlName="Title" placeholder="Enter book title" />
+        <div *ngIf="bookForm.controls['Title'].invalid && bookForm.controls['Title'].touched" class="text-danger">
+          Title is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="Author">Author</label>
+        <input type="text" id="Author" class="form-control" formControlName="Author" placeholder="Enter author name" />
+        <div *ngIf="bookForm.controls['Author'].invalid && bookForm.controls['Author'].touched" class="text-danger">
+          Author is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="Publisher">Publisher</label>
+        <input type="text" id="Publisher" class="form-control" formControlName="Publisher" placeholder="Enter publisher" />
+        <div *ngIf="bookForm.controls['Publisher'].invalid && bookForm.controls['Publisher'].touched" class="text-danger">
+          Publisher is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="Genre">Genre</label>
+        <input type="text" id="Genre" class="form-control" formControlName="Genre" placeholder="Enter genre" />
+        <div *ngIf="bookForm.controls['Genre'].invalid && bookForm.controls['Genre'].touched" class="text-danger">
+          Genre is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="ISBN">ISBN</label>
+        <input type="text" id="ISBN" class="form-control" formControlName="ISBN" placeholder="Enter ISBN" />
+        <div *ngIf="bookForm.controls['ISBN'].invalid && bookForm.controls['ISBN'].touched" class="text-danger">
+          ISBN is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="YearPublished">Year Published</label>
+        <input type="number" id="YearPublished" class="form-control" formControlName="YearPublished" placeholder="Enter year of publication" />
+        <div *ngIf="bookForm.controls['YearPublished'].invalid && bookForm.controls['YearPublished'].touched" class="text-danger">
+          Year Published is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="CopiesAvailable">Copies Available</label>
+        <input type="number" id="CopiesAvailable" class="form-control" formControlName="CopiesAvailable" placeholder="Enter number of copies available" />
+        <div *ngIf="bookForm.controls['CopiesAvailable'].invalid && bookForm.controls['CopiesAvailable'].touched" class="text-danger">
+          Copies Available is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="BookShelfNumber">Book Shelf Number</label>
+        <input type="text" id="BookShelfNumber" class="form-control" formControlName="BookShelfNumber" placeholder="Enter book shelf number" />
+        <div *ngIf="bookForm.controls['BookShelfNumber'].invalid && bookForm.controls['BookShelfNumber'].touched" class="text-danger">
+          Shelf Number is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="Picture">Book Picture</label>
+        <input type="file" id="Picture" class="form-control" (change)="onFileSelected($event)" />
+        <div *ngIf="selectedFile">
+          <p>Selected File: {{ selectedFile.name }}</p>
+        </div>
+      </div>
+  
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-primary" [disabled]="bookForm.invalid">Update Book</button>
+   
+    <button type="button" class="btn btn-secondary" routerLink="/faculty/books">
+      Cancel
+    </button>
+    </form>
+  </div>
+  
