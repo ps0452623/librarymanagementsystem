@@ -85,9 +85,10 @@ namespace LibaryManagementSystem.Controllers
             {
                 return StatusCode(500, new { message = "An error occurred while deleting the book.", details = ex.Message });
 
-            }}
-            [HttpGet("Search-Books")]
-        public async Task<IActionResult> GetFilteredBooks([FromQuery] BookSearchRequestDto searchRequestDto)
+            return ("Book Not Found or Could Not Be Deleted");
+        }
+        [HttpPost("Search-Books")]
+        public async Task<IActionResult> GetFilteredBooks(BookSearchRequestDto searchRequestDto)
         {
             var (books, totalCount) = await _bookService.GetFilteredBooks(searchRequestDto);
 
@@ -98,4 +99,5 @@ namespace LibaryManagementSystem.Controllers
             });
         }
     }
-}
+    }
+

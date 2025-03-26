@@ -8,16 +8,15 @@ namespace DTO
 {
     public class BookSearchRequestDto
     {
-        public string Search {  get; set; } //Search by title
-        public string Genre { get; set; } //Filter by genre
-        public int? YearPublished { get; set; } //Filter by YearPublished
-       public string BranchName { get; set; } //Filter by Branch
-        // public Guid BranchId { get; set; }
-
+        public string? Title {  get; set; } //Search by title
+        public string? Genre { get; set; } //Filter by genre
+        public string? YearPublished { get; set; } //Filter by YearPublished
+       public string? BranchName { get; set; } //Filter by Branch
+        public Guid BranchId { get; set; }
         public string SortBy { get; set; } = "Title"; // Sorting Field
         public bool IsAscending { get; set; } = true; // Ascending/Descending Order
-        public int PageNumber { get; set; }
-        public int PageSize { get; set; }
+        public int PageNumber { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
 
     }
     public class BookSearchResponseDto

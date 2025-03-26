@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from 'environments/environment';
 
@@ -10,8 +10,18 @@ export class ApiServiceService {
   private apiURL = environment.baseUrl
   constructor(private http: HttpClient) { }
   // GET Request
-  get<T>(endpoint: string): Observable<T> {
-    return this.http.get<T>(`${this.apiURL}/${endpoint}`).pipe(
+  get<T>(endpoint: string, filters?: any): Observable<T> {
+    let params = new HttpParams();
+
+    // ✅ Convert filters object to query params
+    if (filters) {
+      Object.keys(filters).forEach(key => {
+        if (filters[key] !== null && filters[key] !== '') {
+          params = params.append(key, filters[key]); // Correct way to append query params
+        }
+      });
+    }
+    return this.http.get<T>(`${this.apiURL}/${endpoint}`, {  params }).pipe(
       catchError(this.handleError)
     );
   }

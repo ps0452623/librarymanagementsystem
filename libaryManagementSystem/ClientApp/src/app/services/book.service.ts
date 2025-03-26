@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { ApiServiceService } from './api.service';
@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class BookService {
-private endpoint = 'Book'; // Endpoint
+private endpoint = 'Book'; // Endpoint\
 private apiURL = environment.baseUrl
 
 // private imageUploadUrl = environment.imageUploadUrl;
@@ -26,5 +26,14 @@ UpdateBook(bookId: any, bookdata: FormData): Observable<any[]> {
 DeleteBook(bookId:any): Observable<any[]>{
   return this.apiService.delete(`${this.endpoint}/${bookId}/Delete`);
 }
-
+    // ✅ Get Books with Pagination & Filters
+    GetFilteredBooks(searchbook: any): Observable<any> {
+        return this.apiService.post(this.endpoint + `/Search-Books`, searchbook);
+    }
+    GetCourse(): Observable<any[]> {
+        return this.apiService.get(`Course/GetAll`);
+    }
+    GetBranchesByCourse(courseId: number): Observable<any[]> {
+        return this.apiService.get(`Branch/GetByCourse`);
+    }
 }

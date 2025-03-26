@@ -157,13 +157,13 @@ namespace Service.Implementation
     }
         public async Task<(IEnumerable<BookSearchResponseDto> Books, int TotalCount)> GetFilteredBooks(BookSearchRequestDto filterRequest)
         {
-            var query = _repository.GetQueryable();
+            var query = _repository.GetQueryable().Include(x=>x.Branch).AsQueryable();
 
             // Search Filter - Case Insensitive
 
-            if (!string.IsNullOrEmpty(filterRequest.Search))
+            if (!string.IsNullOrEmpty(filterRequest.Title))
             {
-                string searchLower = filterRequest.Search.ToLower();
+                string searchLower = filterRequest.Title.ToLower();
                 query = query.Where(b =>
                     b.Title.ToLower().Contains(searchLower) ||
                     b.Author.ToLower().Contains(searchLower) ||
@@ -178,9 +178,9 @@ namespace Service.Implementation
             // YearPublished Filter
 
 
-            if (filterRequest.YearPublished.HasValue)
+            if (!string.IsNullOrEmpty(filterRequest.YearPublished))
             {
-                query = query.Where(b => b.YearPublished == filterRequest.YearPublished);
+                query = query.Where(b => b.YearPublished == Convert.ToInt32(filterRequest.YearPublished));
             }
             // Branch Filter - 
             if (!string.IsNullOrEmpty(filterRequest.BranchName))
@@ -198,20 +198,19 @@ namespace Service.Implementation
                 _ => query.OrderBy(b => b.Title) // Default sorting by Title
             };
 
-            // Apply Pagination
+           // Apply Pagination
             int totalCount = await query.CountAsync();
-            var books = await query
-            .Skip((filterRequest.PageNumber - 1) * filterRequest.PageSize)
-            .Take(filterRequest.PageSize)
-                .ToListAsync();
+            var books = await query.Skip((filterRequest.PageNumber - 1) * 2)
+                             .Take(2)
+                             .ToListAsync();
 
-            if (books == null || !books.Any())
+            if (query == null || !query.Any())
             {
                 return (null, 0); // No books found
             }
             var bookDtos = _mapper.Map<IEnumerable<BookSearchResponseDto>>(books);
 
-            return (bookDtos, totalCount);
+            return (bookDtos, query.Count());
         }
 
     }

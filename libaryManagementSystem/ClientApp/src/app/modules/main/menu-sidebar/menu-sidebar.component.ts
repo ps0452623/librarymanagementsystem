@@ -56,6 +56,11 @@ export const MENU = [
                 name: 'Blank',
                 iconClasses: 'fas fa-file',
                 path: ['/sub-menu-2']
+            },
+            {
+                name: 'Search Books',
+                iconClasses: 'fas fa-file',
+                path: ['/student/search-books']
             }
         ]
     }

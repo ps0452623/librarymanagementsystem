@@ -50,6 +50,7 @@ import { RegisterComponent } from '@modules/register/register.component';
 import { BookListComponent } from './pages/Faculty/Books/booklist/booklist.component';
 import { BookAddComponent } from '@pages/Faculty/Books/book-add/bookadd.component';
 import { UpdateBookComponent } from './pages/Faculty/Books/update-book/update-book.component';
+import { SearchBooksComponent } from '@pages/student/book/search-books/searchbooks.component';
 
 registerLocaleData(localeEn, 'en-EN');
 
@@ -85,8 +86,8 @@ registerLocaleData(localeEn, 'en-EN');
         LoadingComponent,
         OverlayLoadingComponent,
         BookListComponent,
-        
-       
+        BookAddComponent,
+        SearchBooksComponent
     ],
     imports: [
         ProfabricComponentsModule,
