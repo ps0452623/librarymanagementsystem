@@ -7,12 +7,12 @@ import { ToastrService } from 'ngx-toastr';
 import { BookService } from '@services/book.service';
 import { CourseService } from '@services/course.service';
 import { BranchService } from '@services/branch.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-bookadd',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,RouterModule],
 
   templateUrl: './bookadd.component.html',
   styleUrls: ['./bookadd.component.scss']
