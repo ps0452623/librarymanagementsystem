@@ -1,31 +1,33 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { ApiServiceService } from './api.service';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface Book {
-  id: string;
-  title: string;
-  author: string;
-  publisher: string;
-  genre: string;
-  isbn: string;
-  yearPublished: number;
-  copiesAvailable: number;
-  bookShelfNumber: number;
-  picture: string;
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookService {
-private endpoint = 'Book'; // Endpoint
+private endpoint = 'Book'; // Endpoint\
 private apiURL = environment.baseUrl
   constructor(private Http: HttpClient, private apiService: ApiServiceService) { }
 
-  deleteBook(id: string): Observable<void> {  
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  }
+  GetBooks(): Observable<any[]> {
+      return this.apiService.get(this.endpoint+`/GetAll`);
 }
+ AddBooks(bookdata: any){
+  return this.apiService.post(this.endpoint+`/Add`, bookdata);
+}
+GetCourse(): Observable<any[]> {
+  return this.apiService.get(`Course/GetAll`);
+}
+GetBranchesByCourse(courseId: number): Observable<any[]> {
+  return this.apiService.get(`Branch/GetByCourse`);
+}
+
+// ✅ Get Books with Pagination & Filters
+GetFilteredBooks(searchbook: any): Observable<any> { 
+  return this.apiService.post(this.endpoint+`/Search-Books`, searchbook);
+      }
+    }
+

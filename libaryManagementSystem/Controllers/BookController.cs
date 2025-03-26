@@ -35,7 +35,7 @@ namespace LibaryManagementSystem.Controllers
             }
         }
         [HttpPost("Add")]
-        
+
         public async Task<string> Add([FromForm]BookRequestDto bookRequestDto)
         {
              if(bookRequestDto == null)
@@ -77,8 +77,8 @@ namespace LibaryManagementSystem.Controllers
 
             return ("Book Not Found or Could Not Be Deleted");
         }
-        [HttpGet("Search-Books")]
-        public async Task<IActionResult> GetFilteredBooks([FromQuery] BookSearchRequestDto searchRequestDto)
+        [HttpPost("Search-Books")]
+        public async Task<IActionResult> GetFilteredBooks(BookSearchRequestDto searchRequestDto)
         {
             var (books, totalCount) = await _bookService.GetFilteredBooks(searchRequestDto);
 
@@ -89,4 +89,5 @@ namespace LibaryManagementSystem.Controllers
             });
         }
     }
-}
+    }
+

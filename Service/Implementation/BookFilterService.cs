@@ -32,9 +32,9 @@ namespace Service.Implementation
 
             // Search Filter - Case Insensitive
 
-            if (!string.IsNullOrEmpty(filterRequest.Search))
+            if (!string.IsNullOrEmpty(filterRequest.Title))
             {
-                string searchLower = filterRequest.Search.ToLower();
+                string searchLower = filterRequest.Title.ToLower();
                 query = query.Where(b =>
                     b.Title.ToLower().Contains(searchLower) ||
                     b.Author.ToLower().Contains(searchLower) ||
@@ -49,9 +49,9 @@ namespace Service.Implementation
             // YearPublished Filter
 
 
-            if (filterRequest.YearPublished.HasValue)
+            if (string.IsNullOrEmpty(filterRequest.YearPublished))
             {
-                query = query.Where(b => b.YearPublished == filterRequest.YearPublished);
+                query = query.Where(b => b.YearPublished ==Convert.ToInt32(filterRequest.YearPublished));
             }
             // Branch Filter - 
             if (!string.IsNullOrEmpty(filterRequest.BranchName))
@@ -60,7 +60,7 @@ namespace Service.Implementation
             }
 
 
-            //Apply Sorting
+           // Apply Sorting
             query = filterRequest.SortBy?.ToLower() switch
             {
                 "title" => filterRequest.IsAscending ? query.OrderBy(b => b.Title) : query.OrderByDescending(b => b.Title),
@@ -76,13 +76,13 @@ namespace Service.Implementation
             .Take(filterRequest.PageSize)
                 .ToListAsync();
 
-            if (books == null || !books.Any())
+            if (query == null || !query.Any())
             {
                 return (null, 0); // No books found
             }
-            var bookDtos = _mapper.Map<IEnumerable<BookSearchResponseDto>>(books);
+            var bookDtos = _mapper.Map<IEnumerable<BookSearchResponseDto>>(query);
 
-            return (bookDtos, totalCount);
+            return (bookDtos, query.Count());
         }
 
 

@@ -49,6 +49,7 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import { RegisterComponent } from '@modules/register/register.component';
 import { BookListComponent } from './pages/Faculty/Books/booklist/booklist.component';
 import { BookAddComponent } from '@pages/Faculty/Books/book-add/bookadd.component';
+import { SearchBooksComponent } from '@pages/student/book/search-books/searchbooks.component';
 
 registerLocaleData(localeEn, 'en-EN');
 
@@ -84,7 +85,8 @@ registerLocaleData(localeEn, 'en-EN');
         LoadingComponent,
         OverlayLoadingComponent,
         BookListComponent,
-        BookAddComponent
+        BookAddComponent,
+        SearchBooksComponent
     ],
     imports: [
         ProfabricComponentsModule,

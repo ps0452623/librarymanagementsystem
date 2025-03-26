@@ -13,6 +13,7 @@ import {RecoverPasswordComponent} from '@modules/recover-password/recover-passwo
 import {SubMenuComponent} from '@pages/main-menu/sub-menu/sub-menu.component';
 import { BookListComponent } from '@pages/Faculty/Books/booklist/booklist.component';
 import { BookAddComponent } from '@pages/Faculty/Books/book-add/bookadd.component';
+import { SearchBooksComponent } from '@pages/student/book/search-books/searchbooks.component';
 
 const routes: Routes = [
     {
@@ -48,6 +49,10 @@ const routes: Routes = [
             {
                 path: 'faculty/books-add',
                 component: BookAddComponent
+            },
+            {
+                path: 'student/search-books',
+                component: SearchBooksComponent
             }
         ]
     },
