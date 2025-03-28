@@ -42,7 +42,7 @@ namespace LibaryManagementSystem.Controllers
                 try
                 {
                     await _bookService.Create(bookRequestDto);
-                    return Ok(new { message="Book Added Successfully. "});
+                    return Ok(new { message = "Book Added Successfully. " });
                 }
                 catch (Exception)
                 {
@@ -56,7 +56,7 @@ namespace LibaryManagementSystem.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);  
+                return BadRequest(ModelState);
             }
 
             try
@@ -84,8 +84,7 @@ namespace LibaryManagementSystem.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = "An error occurred while deleting the book.", details = ex.Message });
-
-            return ("Book Not Found or Could Not Be Deleted");
+            }
         }
         [HttpPost("Search-Books")]
         public async Task<IActionResult> GetFilteredBooks(BookSearchRequestDto searchRequestDto)
@@ -99,5 +98,6 @@ namespace LibaryManagementSystem.Controllers
             });
         }
     }
-    }
 
+
+}

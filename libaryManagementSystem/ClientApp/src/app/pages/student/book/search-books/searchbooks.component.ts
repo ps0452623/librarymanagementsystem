@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BookService } from '@services/book.service';
+import { BranchService } from '@services/branch.service';
+import { CourseService } from '@services/course.service';
+import { ReservationService } from '@services/reservation.service';
+import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-searchbooks',
@@ -14,32 +19,94 @@ export class SearchBooksComponent implements OnInit {
   PageNumber: number = 1;
   PageSize: number =2;
   searchForm: FormGroup;
+  courses$: Observable<any[]>;
+  branches$: Observable<any[]> = new Observable();
+  imageUrl= environment.imageUploadUrl;
+  reserveBookForm!: FormGroup; 
+  selectedBook: any;
+  modalInstance: any;
 
-  constructor(private bookService: BookService, private fb: FormBuilder) { }
 
-  
-
+  constructor(private bookService: BookService,private courseservice: CourseService,
+       private branchservice : BranchService, private fb: FormBuilder, private reservationService:ReservationService) { }
 
   ngOnInit(): void {
     this.searchForm = this.fb.group({
       Title: [''],
       Genre: [''],
       YearPublished: [''],
-      BranchName :['']
-
+      Course: [''],  // Added course dropdown
+      BranchName: ['']
     });
-
+    this.loadCourses();
     this.GetBooks(); 
+    this.loadBooks();
+
+    
+    this.reserveBookForm = this.fb.group({
+      userId: ['0DB811F6-8B7A-4071-617C-08DD6A27CB1D', Validators.required],
+      noOfCopies: [1, [Validators.required, Validators.min(1)]],
+      reservationDate: ['', Validators.required],
+      returnDate: ['', Validators.required]
+    });
+  }
+  selectBook(bookId:any)
+  {
+    this.selectedBook=bookId;
+    alert(bookId);
+  }
+  loadBooks() {
+    this.bookService.GetBooks().subscribe((data) => {
+      this.books$ = data;
+    });
+  }
+  ReserveBook() {
+    if (this.reserveBookForm.valid && this.selectedBook) {
+      const reservationData = {
+        bookId: this.selectedBook,
+        userId: this.reserveBookForm.value.userId,
+        noOfCopies: this.reserveBookForm.value.noOfCopies,
+        reservationDate: this.reserveBookForm.value.issueDate,
+        returnDate: this.reserveBookForm.value.returnDate
+      };
+
+      console.log('Submitting reservation:', reservationData);
+      this.reservationService.ReserveBook(reservationData).subscribe(
+        (response: any) => {
+          debugger;
+          alert('Book reserved successfully!');
+        this.modalInstance?.hide();
+         
+        },
+        (error) => {
+          debugger;
+          console.error('Reservation failed:', error);
+        }
+      );
+
+    
+    } else {
+      console.log('Form is invalid:', this.reserveBookForm.errors);
+    }
   }
 
- 
+
+  loadCourses(): void {
+    this.courses$ = this.bookService.GetCourse(); // Fetch courses from API
+  }
+
+  loadBranches(): void {
+    
+      this.branches$ = this.branchservice.GetBranchesByCourse(this.searchForm.value.Course); // Fetch branches for the selected course
+  }
+
   GetBooks(): void {
     const bookSearchRequest = {
       title: this.searchForm.get('Title').value, // Search by title
       genre: this.searchForm.get('Genre').value, // Filter by genre
       yearPublished: this.searchForm.get('YearPublished').value, // Filter by YearPublished
-      branchName: this.searchForm.get('BranchName').value, // Filter by Branch
-      branchId: "00000000-0000-0000-0000-000000000000", // Replace with an actual GUID
+      courseId: this.searchForm.get('Course').value,
+      branchName: this.searchForm.get('BranchName').value,
       sortBy: "Title", // Sorting Field
       isAscending: true, // Ascending/Descending Order
       pageNumber: this.PageNumber,
@@ -56,7 +123,6 @@ export class SearchBooksComponent implements OnInit {
   getTotalPages(): number {
   return Math.ceil(this.TotalCount / this.PageSize);
 }
-
 
 onPageChange(newPage: number): void {
   if (newPage < 1 || newPage > this.getTotalPages()) return;

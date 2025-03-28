@@ -15,6 +15,12 @@ namespace DTO
         [Required(ErrorMessage = "BookId Is Required")]
         public Guid BookId { get; set; }
 
+        [Required(ErrorMessage = "ReservationDate Is Required")]
+        public DateTime ReservationDate { get; set; }
+
+        [Required(ErrorMessage = "ReturnDate Is Required")]
+        public DateTime ReturnDate { get; set; }
+
         
     }
     public class BookReservationResponseDto : BookReservationRequestDto

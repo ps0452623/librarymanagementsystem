@@ -3,16 +3,45 @@
     <div class="search-container">
 
       <form [formGroup]="searchForm" (ngSubmit)="GetBooks()">
-          <input type="text" formControlName="Title" placeholder=" Search By Title">
-  <input type="text" formControlName="Genre" placeholder=" Search By Genre">
-  <input type="text" formControlName="YearPublished" placeholder=" Search By Year Published">
-  <input type="text" formControlName="BranchName" placeholder="Search By BranchName">
+        <div class="row">
+          <div class="col-sm-2  form-group">
+            <input type="text" formControlName="Title" class="form-control" placeholder=" By Title">
+          </div>
+          <div class="col-sm-2  form-group">
+            <input type="text" formControlName="Genre"  class="form-control" placeholder="By Genre">
+          </div>
+                    
+          <div class="col-sm-2">
+            <input type="text" formControlName="YearPublished"  class="form-control" placeholder="By Year Published">
+          </div>
+          
+            <!-- Course Dropdown -->
+            <div class="col-sm-2">
+          <select
+                  id="course"
+                  class="form-control"
+                  formControlName="Course"
+                  required
+                  (change)="loadBranches()"
+                >
+                  <option value="" disabled>Select Course</option>
+                  <option *ngFor="let course of courses$ | async" [value]="course.id">{{ course.name }}</option>
+                </select>
+                </div>
+          <!-- Branch Dropdown -->
+          <div class="col-sm-2">
+          <select formControlName="BranchName" class="form-control" [disabled]="!(branches$ | async)?.length">
+            <option value="">Select Branch</option>
+            <option *ngFor="let branch of branches$ | async" [value]="branch.name">
+              {{ branch.name }}
+            </option>
+          </select>
+          </div>
+          <div class="col-sm-2">  <button class="btn btn-primary" type="submit">Search</button></div>
+        </div>
 
-  <button type="submit" >Search</button>
-        </form>
-  
-     
- 
+</form>
+
   </div>
   <table class="table"> 
       <thead class="table-dark">
@@ -24,19 +53,65 @@
               <th>Copies Available</th>
               <th>Book-Shelf Number</th>
               <th>Branch Name</th>
+              <th>Actions</th>
           </tr>
       </thead>
       <tbody><tr *ngFor="let book of books$">
         <td>{{ book.title }}</td>
-        <td><img [src]="book.imageUrl" alt="{{ book.title }}" width="100"></td>
+        <td>
+          <img *ngIf="book.picture"  [src]="imageUrl+book.picture" alt="{{ book.title }}" style="width: 50px; height: auto;">
+        </td>
         <td>{{ book.yearPublished }}</td>
         <td>{{ book.copiesAvailable }}</td>
         <td>{{ book.bookShelfNumber }}</td>
         <td>{{ book.branchName }}</td>
+        <td><button type="button" class="btn btn-primary" data-toggle="modal"  (click)="selectBook(book.id)" data-target="#ReserveBooks">
+          Reserve Books
+        </button></td>
+        </tr>
       </tbody>
     </table>
+
   </div>
-  
+  <div class="modal fade" id="ReserveBooks" tabindex="-1" role="dialog" aria-labelledby="ReserveBooksModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="Book-Reservation" id="ReserveBooksModalLabel">Book-Reservation</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="reserveBookForm" (ngSubmit)="ReserveBook()">
+        <div class="modal-body">
+          
+            <div class="mb-3">
+              <label class="form-label">User ID</label>
+              <input type="text" class="form-control" formControlName="userId" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Number of Copies</label>
+              <input type="number" class="form-control" formControlName="noOfCopies" required min="1" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Reservation Date</label>
+              <input type="date" class="form-control" formControlName="reservationDate" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Return Date</label>
+              <input type="date" class="form-control" formControlName="returnDate" required />
+            </div>
+            <!-- <button type="submit" class="btn btn-primary">Reserve</button> -->
+          
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
 
     
   <!-- Pagination -->
@@ -58,3 +133,4 @@
     </ul>
   </nav>
 
+  
