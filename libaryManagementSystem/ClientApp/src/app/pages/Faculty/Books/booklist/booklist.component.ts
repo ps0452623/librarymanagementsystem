@@ -5,6 +5,7 @@ import { BookService } from '@services/book.service';
 import { environment } from 'environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-booklist',
@@ -44,49 +45,53 @@ export class BookListComponent implements OnInit {
 DeleteBook(bookId: any): void {
   debugger;
   
-    const toastref = this.toastr.info('Are you sure you want to delete this book?','Delete Book',{
-      closeButton : true,
-      tapToDismiss: false,
-      timeOut: 0,
-       positionClass: 'toast-top-center',
-      extendedTimeOut:0
-
-    });
-  
-  setTimeout(() => {
-    const confirmDelete = confirm('Are you sure you want to delete this book?'); // Native confirmation dialog
-    if (confirmDelete) {
+  // Show SweetAlert2 info dialog before asking for confirmation
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'Do you really want to delete this book?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    allowOutsideClick: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Proceed with the deletion if confirmed
       this.bookService.DeleteBook(bookId).subscribe(
         (response: any) => {
           this.GetBooks();
           console.log("API Response:", response);
-          this.toastr.success("Book Deleted Successfully", "Success");
+
+          // Show success notification using SweetAlert2
+          Swal.fire({
+            icon: 'success',
+            title: 'Deleted!',
+            text: 'The book has been deleted successfully.',
+            showConfirmButton: false,
+            timer: 2000
+          });
         },
         (error) => {
           console.error('There was an error deleting the book!', error);
-          this.toastr.error("There was an Error in Deleting Book");
+
+          // Show error notification using SweetAlert2
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'There was an error deleting the book.',
+            showConfirmButton: false,
+            timer: 1500
+          });
         }
       );
     } else {
-      this.toastr.info("Book deletion canceled", "Canceled");
-    }
-  }, 2000); // Wait for 2 seconds before showing the confirmation prompt
-}}
-  // }, timeout);){
-    
-      
-
-  //   this.bookService.DeleteBook(bookId).subscribe( 
-     
-  //     (response: any) => {
-  //        this.GetBooks(); 
-  //        console.log("API Response:", response); 
-
-  //        this.toastr.success("Book Deleted Successfully", "Success");
-         
-  //     },
-  //   ( error) => {
-  //     debugger;
-  //     console.error('There was an error deleting the book!', error);
-  //     this.toastr.error("There was an Error in Deleting Book")    }
-  // );}}}
+      // Show info notification if the deletion was canceled
+      Swal.fire({
+        icon: 'info',
+        title: 'Canceled',
+        text: 'Book deletion has been canceled.',
+        showConfirmButton: false,
+        timer: 1500
+      });
+}})}}

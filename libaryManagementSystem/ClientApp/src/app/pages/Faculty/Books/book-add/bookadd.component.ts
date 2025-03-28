@@ -7,12 +7,12 @@ import { ToastrService } from 'ngx-toastr';
 import { BookService } from '@services/book.service';
 import { CourseService } from '@services/course.service';
 import { BranchService } from '@services/branch.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-bookadd',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,RouterModule],
 
   templateUrl: './bookadd.component.html',
   styleUrls: ['./bookadd.component.scss']
@@ -60,27 +60,21 @@ export class BookAddComponent implements OnInit {
     this.courses$ = this.courseservice.GetCourse();
     
   }
-
-  
-
-    onCourseChange(event: Event): void {
+  onCourseChange(event: Event): void {
      
       const selectElement = event.target as HTMLSelectElement;
       const selectedValue = selectElement.value;
       console.log('Selected value from dropdown:', selectedValue);
-
       this.selectedCourseId = selectedValue;
-      
-      console.log('Converted selected course ID:', this.selectedCourseId);
 
-    
-    this.bookForm.patchValue({ branchId: null });
+      console.log('Converted selected course ID:', this.selectedCourseId);
+      this.bookForm.patchValue({ branchId: null });
  
-      this.loadBranches(this.selectedCourseId);
+       this.loadBranches(this.selectedCourseId);
     
       console.log('Valid selected course ID:', this.selectedCourseId);
 
-    }
+     }
   
     loadBranches(courseId: string): void {
     
