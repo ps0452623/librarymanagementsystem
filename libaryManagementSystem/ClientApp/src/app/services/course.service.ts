@@ -15,5 +15,9 @@ private  apiurl = environment.baseUrl;
  GetCourse(): Observable<any[]> {
     return this.apiService.get(`Course/GetAll`);
   }
+  GetCourseById(id: any): Observable<any> {
+    // Make the API call to fetch a course by its ID
+    return this.apiService.get(`${this.endpoint}/${id}`);
+  }
 }
 

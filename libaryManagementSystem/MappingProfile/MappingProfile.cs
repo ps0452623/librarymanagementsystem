@@ -24,7 +24,7 @@ namespace LibaryManagementSystem.MappingProfile
 
             CreateMap<DesignationDto, Designation>().ReverseMap();
             CreateMap<BookRequestDto, Book>();
-            CreateMap<Book, BookResponseDto>();
+            CreateMap<Book, BookResponseDto>().ForMember(dest => dest.CourseId, opt => opt.MapFrom(src => src.Branch.CourseId));
 
 
             CreateMap<BookReservation,BookReservationResponseDto>().
@@ -37,6 +37,7 @@ namespace LibaryManagementSystem.MappingProfile
                       .ForMember(dest => dest.BranchName, opt => opt.MapFrom(src => src.Branch.Name));
             CreateMap<BookSearchRequestDto, Book>();
 
+            CreateMap<CourseDto, BookRequestDto>().ForMember(dest => dest.CourseId, opt => opt.MapFrom(src => src.Id));
         }
     }
 }

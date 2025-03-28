@@ -86,7 +86,7 @@ registerLocaleData(localeEn, 'en-EN');
         LoadingComponent,
         OverlayLoadingComponent,
         BookListComponent,
-        BookAddComponent,
+     
         SearchBooksComponent
     ],
     imports: [
@@ -106,6 +106,7 @@ registerLocaleData(localeEn, 'en-EN');
         }),
         FontAwesomeModule,
         RegisterComponent,
+        
     ],
     providers: [provideHttpClient(withInterceptorsFromDi())],
     bootstrap: [AppComponent]

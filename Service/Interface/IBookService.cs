@@ -11,7 +11,6 @@ namespace Service.Interface
 {
     public interface IBookService
     {
-        IQueryable<BookResponseDto> GetBookQuery();
         Task<IEnumerable<BookResponseDto>> GetAll();
         Task<BookResponseDto> GetById(Guid id);
         Task Create(BookRequestDto bookRequestDto);

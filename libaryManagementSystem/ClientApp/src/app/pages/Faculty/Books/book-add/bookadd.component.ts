@@ -60,27 +60,21 @@ export class BookAddComponent implements OnInit {
     this.courses$ = this.courseservice.GetCourse();
     
   }
-
-  
-
-    onCourseChange(event: Event): void {
+  onCourseChange(event: Event): void {
      
       const selectElement = event.target as HTMLSelectElement;
       const selectedValue = selectElement.value;
       console.log('Selected value from dropdown:', selectedValue);
-
       this.selectedCourseId = selectedValue;
-      
-      console.log('Converted selected course ID:', this.selectedCourseId);
 
-    
-    this.bookForm.patchValue({ branchId: null });
+      console.log('Converted selected course ID:', this.selectedCourseId);
+      this.bookForm.patchValue({ branchId: null });
  
-      this.loadBranches(this.selectedCourseId);
+       this.loadBranches(this.selectedCourseId);
     
       console.log('Valid selected course ID:', this.selectedCourseId);
 
-    }
+     }
   
     loadBranches(courseId: string): void {
     
