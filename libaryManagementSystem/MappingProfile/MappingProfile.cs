@@ -27,10 +27,14 @@ namespace LibaryManagementSystem.MappingProfile
             CreateMap<Book, BookResponseDto>().ForMember(dest => dest.CourseId, opt => opt.MapFrom(src => src.Branch.CourseId));
 
 
-            CreateMap<BookReservation,BookReservationResponseDto>().
+            CreateMap<BookReservation, BookReservationResponseDto>().
                 ForMember(dest => dest.BookTitle, opt => opt.MapFrom(src => src.Book.Title))
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FirstName));
-            CreateMap<BookReservationRequestDto, BookReservation>();
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FirstName))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => "Pending"));
+            CreateMap<BookReservationRequestDto, BookReservation>()
+
+                .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => DateTime.UtcNow))
+            .ForMember(dest => dest.StatusId, opt => opt.MapFrom(src => Guid.Parse("612A98BC-6A00-4191-B961-A2D43484E0A6")));
 
 
             CreateMap<Book, BookSearchResponseDto>()

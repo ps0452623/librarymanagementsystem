@@ -18,11 +18,11 @@ namespace Service.Implementation
         private readonly AppDbContext _context;
 
         private readonly IGenericRepository<BookReservation> _reserveRepository;
-        
+
         private readonly IMapper _mapper;
 
 
-        public BookReservationService(IGenericRepository<BookReservation> reserveRepository,AppDbContext context, IMapper mapper)
+        public BookReservationService(IGenericRepository<BookReservation> reserveRepository, AppDbContext context, IMapper mapper)
         {
             _reserveRepository = reserveRepository;
             _mapper = mapper;
@@ -56,52 +56,11 @@ namespace Service.Implementation
         }
 
         //_________________Post________________________________________
-        public async Task<BookReservationResponseDto> AddReservationAsync(BookReservationRequestDto request)
+        public async Task AddReservationAsync(BookReservationRequestDto request)
         {
-            // Create a new reservation object
-            var reservation = new BookReservation
-            {
-                BookId = request.BookId,
-                UserId = request.UserId,
-                CreatedOn= DateTime.UtcNow,
-                StatusId = Guid.Parse("48B956B1-56B8-400A-8158-28B58B6CBF82") // Pending Status
-            };
-
+            var reservation = _mapper.Map<BookReservation>(request);
             await _reserveRepository.AddAsync(reservation);
-
-
-
-
-            var addedReservation = await _reserveRepository.
-                GetQueryable()
-                 .Include(r => r.Book)
-                 .Include(r => r.User)
-                  .FirstOrDefaultAsync(r => r.Id == reservation.Id);
-
-
-            if (addedReservation == null)
-            {
-                throw new Exception("Reservation not found after creation.");
-            }
-
-            return new BookReservationResponseDto
-            {
-
-                ReservationId = addedReservation.Id,
-                BookId = addedReservation.BookId,
-                BookTitle = addedReservation.Book?.Title,
-                UserName = addedReservation.User?.FirstName,
-                UserId = addedReservation.UserId,
-                Status = "Pending",
-                CreatedOn = addedReservation.CreatedOn
-            };
-
-            
-        
         }
-        //_____________________________Put___________________
-
-
         public async Task<string> UpdateReservationStatusAsync(Guid BookReservationId, Guid StatusId)
         {
             var reservation = await _reserveRepository.GetByIdAsync(BookReservationId);
@@ -117,5 +76,5 @@ namespace Service.Implementation
         }
 
     }
-    
+
 }

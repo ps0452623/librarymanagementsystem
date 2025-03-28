@@ -62,12 +62,12 @@ namespace LibaryManagementSystem.Controllers
         [HttpPost("Create")]
         public async Task<IActionResult> Create([FromBody]BookReservationRequestDto request)
         {
-            if (request == null)
+            if (!ModelState.IsValid)
             {
                 return BadRequest("Invalid reservation request.");
             }
-            var response = await _reservation.AddReservationAsync(request);
-           return Ok(response);
+            await _reservation.AddReservationAsync(request);
+            return Ok(new { message = "Book issue request has been submitted successfully. Please check the status of your request after sometime." });
         }
 
 

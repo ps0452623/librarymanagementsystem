@@ -62,7 +62,8 @@ const routes: Routes = [
             {
                 path: 'student/search-books',
                 component: SearchBooksComponent
-            }
+            },
+            
         ]
     },
     {

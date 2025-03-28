@@ -40,4 +40,7 @@ DeleteBook(bookId:any): Observable<any[]>{
     GetBranchesByCourse(courseId: number): Observable<any[]> {
         return this.apiService.get(`Branch/GetByCourse`);
     }
+    ReserveBook(reservationData: any): Observable<any> {
+      return this.apiService.post(this.endpoint + `/reserve-Books`, reservationData);
+}
 }

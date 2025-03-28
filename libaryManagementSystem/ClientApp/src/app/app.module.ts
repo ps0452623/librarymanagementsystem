@@ -86,7 +86,6 @@ registerLocaleData(localeEn, 'en-EN');
         LoadingComponent,
         OverlayLoadingComponent,
         BookListComponent,
-     
         SearchBooksComponent
     ],
     imports: [
