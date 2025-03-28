@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Service.Interface;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Service.Implementation
 {
@@ -21,7 +22,7 @@ namespace Service.Implementation
         private readonly IMapper _mapper;
         private readonly IGenericRepository<Branch> _branchRepository;
         private readonly IHostEnvironment _hostEnvironment;
-        public BookService(IGenericRepository<Book> bookrepository, IMapper mapper, IGenericRepository<Branch> branchRepository , IHostEnvironment hostEnvironment)
+        public BookService(IGenericRepository<Book> bookrepository, IMapper mapper, IGenericRepository<Branch> branchRepository, IHostEnvironment hostEnvironment)
         {
             _repository = bookrepository;
             _mapper = mapper;
@@ -47,57 +48,31 @@ namespace Service.Implementation
         }
 
 
-
-        public IQueryable<BookResponseDto> GetBookQuery()
-        {
-            var bookQuery = _repository.GetQueryable().Include(b => b.Branch);
-            var branchQuery = _branchRepository.GetQueryable();
-
-            return from book in bookQuery
-                   join branch in branchQuery on book.BranchId equals branch.Id into br
-                   from branch in br.DefaultIfEmpty() // Left Join
-                   select new BookResponseDto
-                   {
-                       Id = book.Id,
-                       Title = book.Title,
-                       Author = book.Author,
-                       Publisher = book.Publisher,
-                       Genre = book.Genre,
-                       ISBN = book.ISBN,
-                       YearPublished = book.YearPublished,
-                       CopiesAvailable = book.CopiesAvailable,
-                       BookShelfNumber = book.BookShelfNumber,
-                       Picture = book.Picture,
-                       BranchName = book.Branch != null ? book.Branch.Name : "N/A"
-                   };
-        }
-
-
-
-
         public async Task<IEnumerable<BookResponseDto>> GetAll()
         {
-            return await GetBookQuery().ToListAsync();
+            var books = await _repository.GetAllAsync();
+            return _mapper.Map<IEnumerable<BookResponseDto>>(books);
 
         }
 
 
         public async Task<BookResponseDto> GetById(Guid id)
         {
-            return await GetBookQuery().FirstOrDefaultAsync(b => b.Id == id);
-
+            var entity = await _repository.GetQueryable().Include(x => x.Branch).FirstOrDefaultAsync(x => x.Id == id);
+            return _mapper.Map<BookResponseDto>(entity);
         }
         public async Task Create(BookRequestDto bookRequestDto)
-        {           
-            var newBook = _mapper.Map<Book>(bookRequestDto);    
+        {
+            var newBook = _mapper.Map<Book>(bookRequestDto);
             newBook.Id = Guid.NewGuid();
-            if(bookRequestDto.Picture != null && bookRequestDto.Picture.Length > 0 )
+            if (bookRequestDto.Picture != null && bookRequestDto.Picture.Length > 0)
             {
                 newBook.Picture = SaveBookPicture(bookRequestDto.Picture);
             }
-            try { 
-            var books = await _repository.AddAsync(newBook);
-               
+            try
+            {
+                var books = await _repository.AddAsync(newBook);
+
 
             }
             catch (Exception)
@@ -128,7 +103,7 @@ namespace Service.Implementation
 
                 existingBook.Picture = SaveBookPicture(bookRequestDto.Picture); // Update new picture
             }
-          
+
 
             await _repository.UpdateAsync(existingBook);
 
@@ -154,10 +129,10 @@ namespace Service.Implementation
 
             await _repository.DeleteAsync(id);
             return;
-    }
+        }
         public async Task<(IEnumerable<BookSearchResponseDto> Books, int TotalCount)> GetFilteredBooks(BookSearchRequestDto filterRequest)
         {
-            var query = _repository.GetQueryable().Include(x=>x.Branch).AsQueryable();
+            var query = _repository.GetQueryable().Include(x => x.Branch).AsQueryable();
 
             // Search Filter - Case Insensitive
 
@@ -198,7 +173,7 @@ namespace Service.Implementation
                 _ => query.OrderBy(b => b.Title) // Default sorting by Title
             };
 
-           // Apply Pagination
+            // Apply Pagination
             int totalCount = await query.CountAsync();
             var books = await query.Skip((filterRequest.PageNumber - 1) * 2)
                              .Take(2)

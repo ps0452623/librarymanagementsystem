@@ -28,13 +28,16 @@ namespace DTO
         public int BookShelfNumber { get; set; }
         public IFormFile? Picture { get; set; }
         [Required(ErrorMessage ="Branch is Required")]
-        public Guid BranchID { get; set; }
+        public Guid CourseId { get; set; }
+
+        public Guid BranchId { get; set; }
 
 
     }
     public class BookResponseDto
     {
         public Guid Id { get; set; }
+        public Guid BranchId { get; set; }
         public string Title { get; set; }
         public string Author { get; set; }
         public string Publisher { get; set; }
@@ -45,6 +48,7 @@ namespace DTO
         public int BookShelfNumber { get; set; }
         public string Picture { get; set; }
         public string BranchName { get; set; }
+        public Guid CourseId { get; set; }
 
 
 

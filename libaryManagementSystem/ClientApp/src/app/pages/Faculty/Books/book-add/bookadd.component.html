@@ -1,6 +1,6 @@
 <div class="container mt-4">
     <h2>Add a Book</h2>
-    <a routerLink="/faculty/books" class="btn btn-primary mb-3">Back</a>
+    <a [routerLink]="'/faculty/books'" routerLinkActive="active" class="btn btn-primary mb-3">Back</a>
   
     <!-- Form to Add Book -->
     <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
@@ -178,9 +178,9 @@
       <button type="submit" class="btn btn-success" [disabled]="!bookForm.valid">
         Add Book
       </button>
-      <button type="button" class="btn btn-secondary" routerLink="/faculty/books">
+      <a type="button" class="btn btn-secondary" [routerLink]="'/faculty/books'">
         Cancel
-      </button>
+      </a>
     </form>
   </div>
   

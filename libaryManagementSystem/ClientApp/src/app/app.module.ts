@@ -105,6 +105,7 @@ registerLocaleData(localeEn, 'en-EN');
         }),
         FontAwesomeModule,
         RegisterComponent,
+        
     ],
     providers: [provideHttpClient(withInterceptorsFromDi())],
     bootstrap: [AppComponent]

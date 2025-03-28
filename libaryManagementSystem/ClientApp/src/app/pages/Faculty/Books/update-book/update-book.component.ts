@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BookService } from '@services/book.service';
 import { BranchService } from '@services/branch.service';
 import { CourseService } from '@services/course.service';
+import { environment } from 'environments/environment';
 import { ToastrService } from 'ngx-toastr';
 
 import { Observable } from 'rxjs';
@@ -12,18 +13,23 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-update-book',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './update-book.component.html',
   styleUrls: ['./update-book.component.scss']
 })
 export class UpdateBookComponent implements OnInit {
   bookForm: FormGroup; 
+  filePreview: string | ArrayBuffer | null = null;  // Define filePreview variable
+  imageUrl= environment.imageUploadUrl;
+
   selectedFile: File | null = null;
   courses$: Observable<any[]>;
   branches$: Observable<any[]>;
+  CourseId: any;
   selectedCourseId: any;
   bookId:string | null = null; 
-
+bookToEdit:any;
+Picture;
   
   
   constructor(private fb: FormBuilder,
@@ -34,6 +40,7 @@ export class UpdateBookComponent implements OnInit {
         private toastr: ToastrService,
         private router: Router,
         private route: ActivatedRoute
+        
 
       ) {
         this.bookForm = this.fb.group({
@@ -77,39 +84,52 @@ export class UpdateBookComponent implements OnInit {
       }
     
       loadBookDetails(): void {
-        if (this.bookId !== null) {
-          this.bookservice.GetBooks().subscribe(
-            (books) => {
-              const bookToEdit = books.find((book) => book.id === this.bookId);
-              if (bookToEdit) {
+        
+          this.bookservice.GetBookById(this.bookId).subscribe(
+            (book) => {
+              debugger
+              this.bookToEdit = book;
+            
+                this.selectedCourseId = this.bookToEdit.courseId;
                 this.bookForm.patchValue({
-                  CourseId: bookToEdit.courseId,
-                  BranchId: bookToEdit.branchId,
-                  Title: bookToEdit.title,
-                  Author: bookToEdit.author,
-                  Publisher: bookToEdit.publisher,
-                  Genre: bookToEdit.genre,
-                  ISBN: bookToEdit.isbn,
-                  YearPublished: bookToEdit.yearPublished,
-                  CopiesAvailable: bookToEdit.copiesAvailable,
-                  BookShelfNumber: bookToEdit.bookShelfNumber
+                
+                  CourseId: this.bookToEdit.courseId,
+                  BranchId: this.bookToEdit.branchId,
+                  Title: this.bookToEdit.title,
+                  Author: this.bookToEdit.author,
+                  Publisher: this.bookToEdit.publisher,
+                  Genre: this.bookToEdit.genre,
+                  ISBN: this.bookToEdit.isbn,
+                  YearPublished: this.bookToEdit.yearPublished,
+                  CopiesAvailable: this.bookToEdit.copiesAvailable,
+                  BookShelfNumber: this.bookToEdit.bookShelfNumber,
+                  Picture: this.bookToEdit.Picture
                 });
-              } else {
-                this.toastr.error('Book not found');
-              }
+                
+                if (this.bookToEdit.picture) {
+                  debugger
+                  this.filePreview = this.bookToEdit.picture;
+                }
+                this.loadBranches(this.selectedCourseId);
+             
             },
             (error) => {
               this.toastr.error('Failed to load book details');
             }
           );
-        }
+        
       }
     
       onFileSelected(event: any): void {
-        const file: File = event.target.files[0];
-        if (file) {
-          this.selectedFile = file;
-        }
+        const input = event.target as HTMLInputElement;
+    if (input && input.files && input.files[0]) {
+      this.selectedFile = input.files[0];
+
+      // Preview the selected image
+      const reader = new FileReader();
+      reader.onload = (e) => this.filePreview = reader.result;
+      reader.readAsDataURL(this.selectedFile);
+    }
       }
     
       updateBook(formData: FormData): void {
@@ -118,6 +138,7 @@ export class UpdateBookComponent implements OnInit {
           this.bookservice.UpdateBook(this.bookId, formData).subscribe(
             (response) => {
               this.toastr.success('Book updated successfully');
+              
               this.router.navigate(['/book-list']);
             },
             (error) => {
@@ -126,8 +147,10 @@ export class UpdateBookComponent implements OnInit {
           );
         } else {
           this.toastr.error('Book ID is missing for update');
+          
         }
       }
+      
     
       onSubmit(): void {
         debugger;
@@ -146,4 +169,5 @@ export class UpdateBookComponent implements OnInit {
           this.toastr.warning('Please fill out all required fields.');
         }
       }
+      
     }
