@@ -16,5 +16,16 @@ private apiURL = environment.baseUrl
 
     ReserveBook(reservationData: any): Observable<any> {
       return this.apiService.post(this.endpoint + `/create`, reservationData);
+     
+}
+GetAllReservations(): Observable<any[]> {
+  return this.apiService.get(`BookReservation/GetAll`);
+}
+UpdateBook(Id: any, bookdata: FormData): Observable<any[]> {
+  return this.apiService.put(`${this.endpoint}/${Id}`, bookdata);
+}
+DeleteBook(Id:any): Observable<any[]>{
+  return this.apiService.delete(`${this.endpoint}/Delete/${Id}`);
 }
 }
+

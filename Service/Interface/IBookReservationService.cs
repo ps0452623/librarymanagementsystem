@@ -12,6 +12,9 @@ namespace Service.Interface
         Task<IEnumerable<BookReservationResponseDto>> GetAllReservationsAsync();
         Task<BookReservationResponseDto> GetReservationByIdAsync(Guid id);
         Task AddReservationAsync(BookReservationRequestDto request);
-        Task<string> UpdateReservationStatusAsync(Guid BookReservationId, Guid StatusId);
+        Task UpdateReservationAsync( Guid Id, BookReservationRequestDto bookrequestDto);
+
+        //Task<string> UpdateReservationStatusAsync(Guid BookReservationId, Guid StatusId);
+        Task DeleteReservationAsync(Guid Id);
     }
 }

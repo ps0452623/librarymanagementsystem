@@ -61,7 +61,13 @@ export const MENU = [
                 name: 'Search Books',
                 iconClasses: 'fas fa-file',
                 path: ['/student/search-books']
+            },
+            {
+                name: 'Reserved Books',
+                iconClasses: 'fas fa-file',
+                path: ['/student/reserved-books']
             }
+
         ]
     }
 ];

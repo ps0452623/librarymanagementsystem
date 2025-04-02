@@ -1,0 +1,44 @@
+<div class="container mt-4">
+    <h2>Reserved-Books</h2>
+    
+    <!-- Table to display book details -->
+    <div class="table-responsive"> 
+    <table class="table">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>User Name</th>
+          <th>Book Title</th>
+          <th>Picture</th>
+          <th>Created On</th>
+          <th>Reservation Date</th>
+          <th>Return  Date</th>
+          <th>Number Of Copies</th>
+          <th>Status</th>
+          <th>Actions</th>
+          <th>Delete</th> 
+          
+          
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Loop through books list -->
+        <tr *ngFor="let Reservations of Reservations$ | async; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ Reservations.userName }}</td>
+          <td>{{ Reservations.bookTitle }}</td>
+        <td>
+          <img *ngIf="Reservations.picture"  [src]="imageUrl+Reservations.picture" alt="{{ Reservations.title }}" style="width: 50px; height: auto;">
+        </td>
+        <td>{{ Reservations.createdOn | date:'dd/MM/yyyy'  }}</td>
+          <td>{{ Reservations.reservationDate | date:'dd/MM/yyyy' }}</td>
+          <td>{{ Reservations.returnDate | date:'dd/MM/yyyy'  }}</td>
+          <td>{{Reservations.numberOfCopies}}</td>
+          <td>{{ Reservations.status }}</td>
+          <td>
+           
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
