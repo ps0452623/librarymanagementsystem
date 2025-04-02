@@ -58,7 +58,9 @@ namespace Service.Implementation
 
         public async Task<BookResponseDto> GetById(Guid id)
         {
-            var entity = await _repository.GetQueryable().Include(x => x.Branch).FirstOrDefaultAsync(x => x.Id == id);
+            var entity = await _repository.GetQueryable()
+                .Include(x => x.Branch)
+                .FirstOrDefaultAsync(x => x.Id == id);
             return _mapper.Map<BookResponseDto>(entity);
         }
         public async Task Create(BookRequestDto bookRequestDto)
@@ -174,7 +176,7 @@ namespace Service.Implementation
             };
 
             // Apply Pagination
-            int totalCount = await query.CountAsync();
+                   int totalCount = await query.CountAsync();
             var books = await query.Skip((filterRequest.PageNumber - 1) * 2)
                              .Take(2)
                              .ToListAsync();

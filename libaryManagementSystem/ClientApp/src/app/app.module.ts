@@ -51,6 +51,7 @@ import { BookListComponent } from './pages/Faculty/Books/booklist/booklist.compo
 import { BookAddComponent } from '@pages/Faculty/Books/book-add/bookadd.component';
 import { UpdateBookComponent } from './pages/Faculty/Books/update-book/update-book.component';
 import { SearchBooksComponent } from '@pages/student/book/search-books/searchbooks.component';
+import { ReservedBooksComponent } from './pages/student/book/reserved-books/reserved-books.component';
 
 registerLocaleData(localeEn, 'en-EN');
 
@@ -86,7 +87,8 @@ registerLocaleData(localeEn, 'en-EN');
         LoadingComponent,
         OverlayLoadingComponent,
         BookListComponent,
-        SearchBooksComponent
+        SearchBooksComponent,
+        ReservedBooksComponent
     ],
     imports: [
         ProfabricComponentsModule,

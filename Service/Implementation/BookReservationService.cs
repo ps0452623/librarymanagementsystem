@@ -34,10 +34,17 @@ namespace Service.Implementation
 
         public async Task<IEnumerable<BookReservationResponseDto>> GetAllReservationsAsync()
         {
-            var reserve = await _reserveRepository.GetAllAsync();
+            var reserve = _reserveRepository.GetQueryable()
+                .Include(x => x.Book).AsQueryable()
+                .Include(x => x.User).AsQueryable();
+
+
             return _mapper.Map<IEnumerable<BookReservationResponseDto>>(reserve);
 
         }
+
+
+
 
         //_________________GetById_______________________
         public async Task<BookReservationResponseDto> GetReservationByIdAsync(Guid Id)
@@ -61,20 +68,49 @@ namespace Service.Implementation
             var reservation = _mapper.Map<BookReservation>(request);
             await _reserveRepository.AddAsync(reservation);
         }
-        public async Task<string> UpdateReservationStatusAsync(Guid BookReservationId, Guid StatusId)
+        //public async Task<string> UpdateReservationStatusAsync(Guid BookReservationId, Guid StatusId)
+        //{
+        //    var reservation = await _reserveRepository.GetByIdAsync(BookReservationId);
+        //    if (reservation == null)
+        //        return ("Reservation Not Found");
+
+        //    reservation.StatusId = StatusId;
+        //    await _reserveRepository.UpdateAsync(reservation);
+
+        //    return ("ReservationStatus Updated");
+
+
+        //}
+        //-------------------Put-----------------//
+        public async Task UpdateReservationAsync(Guid Id, BookReservationRequestDto request)
         {
-            var reservation = await _reserveRepository.GetByIdAsync(BookReservationId);
+            var reservation = await _reserveRepository.GetByIdAsync(Id);
             if (reservation == null)
-                return ("Reservation Not Found");
+            {
+                throw new KeyNotFoundException("Reservation not found.");
+            }
 
-            reservation.StatusId = StatusId;
+           
+            reservation.BookId = request.BookId;
+            reservation.UserId = request.UserId;
+            reservation.NumberOfCopies = request.NumberOfCopies;
+            reservation.ReservationDate = request.ReservationDate;
+            reservation.ReturnDate = request.ReturnDate;
+
             await _reserveRepository.UpdateAsync(reservation);
-
-            return ("ReservationStatus Updated");
-
-
+            return ;
         }
 
+
+
+
+
+        //----------------------Delete---------------------//
+        public async Task DeleteReservationAsync(Guid Id)
+        {
+            await _reserveRepository.DeleteAsync(Id);
+            return;
+        }
     }
 
 }
