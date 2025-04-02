@@ -17,4 +17,11 @@ private apiURL = environment.baseUrl
     ReserveBook(reservationData: any): Observable<any> {
       return this.apiService.post(this.endpoint + `/create`, reservationData);
 }
+
+updateBookStatus(bookId: number, status: string): Observable<any> {
+  const params = new HttpParams().set('status', status); // Create HttpParams if needed
+  return this.apiService.put(`${this.endpoint}/${bookId}/status`, { status }); // Updated request using HTTP Params if needed
+}
+
+
 }

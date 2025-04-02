@@ -14,12 +14,12 @@ private apiURL = environment.baseUrl
 // private imageUploadUrl = environment.imageUploadUrl;
   constructor(private Http: HttpClient, private apiService: ApiServiceService) { }
 
-  GetBooks(): Observable<any[]> {
+GetBooks(): Observable<any[]> {
       return this.apiService.get(`${this.endpoint}/GetAll`);
 }
 GetBookById(bookId : any): Observable<any[]>
 {
-  return this,this.apiService.get(`${this.endpoint}/${bookId}/GetById`)
+  return this.apiService.get(`${this.endpoint}/${bookId}/GetById`)
 }
  AddBooks(bookdata: FormData): Observable<any[]>{
   return this.apiService.post(`${this.endpoint}/Add`, bookdata);

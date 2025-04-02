@@ -15,6 +15,7 @@ import { BookListComponent } from '@pages/Faculty/Books/booklist/booklist.compon
 import { BookAddComponent } from '@pages/Faculty/Books/book-add/bookadd.component';
 import { UpdateBookComponent } from '@pages/Faculty/Books/update-book/update-book.component';
 import { SearchBooksComponent } from '@pages/student/book/search-books/searchbooks.component';
+import { BookReservationRequestsComponent } from '@pages/Faculty/Books/book-reservation-requests/book-reservation-requests.component';
 
 const routes: Routes = [
     {
@@ -62,6 +63,10 @@ const routes: Routes = [
             {
                 path: 'student/search-books',
                 component: SearchBooksComponent
+            },
+            {
+                path: 'faculty/BookReservationRequests',
+                component: BookReservationRequestsComponent
             },
             
         ]

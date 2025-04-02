@@ -1,0 +1,46 @@
+<div class="container">
+    <h2>Book Reservation Requests</h2>
+  
+    <!-- Display student details -->
+    <div *ngIf="students$ | async as students; else loading">
+      <div *ngFor="let student of students">
+        <div class="student-details">
+          <h3>{{ student.Name }} (ID: {{ student.id }})</h3>
+          <p><strong>Email:</strong> {{ student.Email }}</p>
+          <p><strong>Phone:</strong> {{ student.Phone }}</p>
+        </div>
+  
+        <!-- List of book reservation requests for the student -->
+        <div *ngIf="student.books?.length > 0; else noBooks">
+          <h4>Reserved Books:</h4>
+          <div *ngFor="let book of student.books" class="book-request">
+            <div class="book-info">
+              <p><strong>Title:</strong> {{ book.title }}</p>
+              <p><strong>Author:</strong> {{ book.author }}</p>
+              <p><strong>Requested Date:</strong> {{ book.requestDate | date }}</p>
+            </div>
+  
+            <!-- Action buttons to accept or decline the request -->
+            <div class="actions">
+              <button class="btn btn-success" (click)="changeRequestStatus(book.id, 'accepted')">Accept</button>
+              <button class="btn btn-danger" (click)="changeRequestStatus(book.id, 'declined')">Decline</button>
+            </div>
+          </div>
+        </div>
+        <ng-template #noBooks>
+          <p>No books requested for reservation.</p>
+        </ng-template>
+      </div>
+    </div>
+  
+    <!-- Loading state -->
+    <ng-template #loading>
+      <p>Loading student details...</p>
+    </ng-template>
+  
+    <!-- Error state -->
+    <ng-template #error>
+      <p class="text-danger">Failed to load data. Please try again later.</p>
+    </ng-template>
+  </div>
+  

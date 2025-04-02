@@ -112,12 +112,7 @@ namespace Service.Implementation
         public async Task Delete(Guid id)
         {
             var book = await _repository.GetByIdAsync(id);
-            if (book == null)
-            {
-                throw new KeyNotFoundException("Book not found");
 
-
-            }
             if (!string.IsNullOrEmpty(book.Picture))
             {
                 var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", book.Picture.TrimStart('/'));

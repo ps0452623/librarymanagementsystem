@@ -51,6 +51,7 @@ import { BookListComponent } from './pages/Faculty/Books/booklist/booklist.compo
 import { BookAddComponent } from '@pages/Faculty/Books/book-add/bookadd.component';
 import { UpdateBookComponent } from './pages/Faculty/Books/update-book/update-book.component';
 import { SearchBooksComponent } from '@pages/student/book/search-books/searchbooks.component';
+import { BookReservationRequestsComponent } from './pages/Faculty/Books/book-reservation-requests/book-reservation-requests.component';
 
 registerLocaleData(localeEn, 'en-EN');
 
@@ -97,7 +98,11 @@ registerLocaleData(localeEn, 'en-EN');
         ReactiveFormsModule,
         BrowserAnimationsModule,
         BookAddComponent,
+        BookReservationRequestsComponent,
+
         UpdateBookComponent,
+
+        
         ToastrModule.forRoot({
             timeOut: 3000,
             positionClass: 'toast-top-right',
