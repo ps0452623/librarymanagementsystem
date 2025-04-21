@@ -22,7 +22,6 @@ namespace DataAcessLayer.Data
         public DbSet<Course> Courses { get; set; }
         public DbSet<Branch> Branches { get; set; }
         public DbSet<Book> Books { get; set; }
-        public DbSet<ReservationStatus> ReservationStatuses{ get; set; }
         public DbSet<BookReservation> BookReservations { get; set; }
        
     }

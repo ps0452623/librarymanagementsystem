@@ -12,10 +12,11 @@ endpoint= "Student"
   constructor(private apiService:ApiServiceService) {
   
 }
-GetStudentById(Id : any):Observable<any[]>{
-return this.apiService.get(`${this.endpoint}/${Id}`)
+GetStudentById(Id: any): Observable<any> {
+  // Make the API call to fetch a course by its ID
+  return this.apiService.get(`${this.endpoint}/${Id}`);
+}
 
-   }
 GetAllStudents():Observable<any[]>{
   return this.apiService.get(`${this.endpoint}/GetAll`)
    }

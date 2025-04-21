@@ -13,15 +13,30 @@ private apiURL = environment.baseUrl
 
 // private imageUploadUrl = environment.imageUploadUrl;
   constructor(private Http: HttpClient, private apiService: ApiServiceService) { }
-
-    ReserveBook(reservationData: any): Observable<any> {
+  
+ ReserveBook(reservationData: any): Observable<any> {
       return this.apiService.post(this.endpoint + `/create`, reservationData);
+     
+}
+GetAllReservations(): Observable<any[]> {
+  return this.apiService.get(`BookReservation/GetAll`);
+}
+GetReservationById(Id: any): Observable<any> {
+  return this.apiService.get(`${this.endpoint}/GetById/${Id}`);
 }
 
-updateBookStatus(bookId: number, status: string): Observable<any> {
-  const params = new HttpParams().set('status', status); // Create HttpParams if needed
-  return this.apiService.put(`${this.endpoint}/${bookId}/status`, { status }); // Updated request using HTTP Params if needed
+UpdateReservationStatus(Id: any, StatusId: number): Observable<any> {
+  return this.apiService.put(`${this.endpoint}/${Id}/status?status=${StatusId}`,StatusId); 
+}
+
+GetStatuses():Observable<any[]>{
+  return this.apiService.get(`${this.endpoint}/statuses/GetAll`)
+}
+
+GetFilteredReservations(searchReservation: any):Observable<any>
+{
+  return this.apiService.get(`${this.endpoint}/GetFilteredReservations`, {searchReservation})
+}
 }
 
 
-}

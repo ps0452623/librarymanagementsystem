@@ -41,8 +41,7 @@ builder.Services.AddScoped<IBranchService, BranchService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBookReservationService, BookReservationService>();
-
-
+builder.Services.AddScoped<IReservationSearchService, ReservationSearchService>();
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 

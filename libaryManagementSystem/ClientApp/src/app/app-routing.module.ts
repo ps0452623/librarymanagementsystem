@@ -1,4 +1,3 @@
-import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {MainComponent} from '@modules/main/main.component';
 import {BlankComponent} from '@pages/blank/blank.component';
@@ -15,7 +14,9 @@ import { BookListComponent } from '@pages/Faculty/Books/booklist/booklist.compon
 import { BookAddComponent } from '@pages/Faculty/Books/book-add/bookadd.component';
 import { UpdateBookComponent } from '@pages/Faculty/Books/update-book/update-book.component';
 import { SearchBooksComponent } from '@pages/student/book/search-books/searchbooks.component';
+import { ReservedBooksComponent } from '@pages/student/book/reserved-books/reserved-books.component';
 import { BookReservationRequestsComponent } from '@pages/Faculty/Books/book-reservation-requests/book-reservation-requests.component';
+import { NgModule } from '@angular/core';
 
 const routes: Routes = [
     {
@@ -68,7 +69,16 @@ const routes: Routes = [
                 path: 'faculty/BookReservationRequests',
                 component: BookReservationRequestsComponent
             },
+            {
+                path: 'faculty/BookReservationRequests/:id', 
+               component: BookReservationRequestsComponent 
+           },
             
+            {
+                path: 'student/reserved-books',
+                component: ReservedBooksComponent
+            },
+           
         ]
     },
     {

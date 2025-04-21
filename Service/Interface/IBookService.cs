@@ -19,6 +19,5 @@ namespace Service.Interface
         Task<(IEnumerable<BookSearchResponseDto> Books, int TotalCount)> GetFilteredBooks(BookSearchRequestDto filterRequest);
 
 
-
     }
 }

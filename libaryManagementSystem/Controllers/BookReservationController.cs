@@ -1,4 +1,5 @@
 ﻿using DataAcessLayer.Entities;
+using DataAcessLayer.Enum;
 using DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +13,11 @@ namespace LibaryManagementSystem.Controllers
     public class BookReservationController : ControllerBase
     {
         private readonly IBookReservationService _reservation;
-        public BookReservationController(IBookReservationService reservation)
+        private readonly IReservationSearchService _reservationSearch;
+        public BookReservationController(IBookReservationService reservation, IReservationSearchService reservationSearch)
         {
             _reservation = reservation;
+            _reservationSearch = reservationSearch;
         }
 
 
@@ -24,6 +27,7 @@ namespace LibaryManagementSystem.Controllers
             var reservedbooks = await _reservation.GetAllReservationsAsync();
             return Ok(reservedbooks);
         }
+       
 
         [HttpGet("GetById/{Id}")]
         public async Task<IActionResult> GetById(Guid Id)
@@ -39,28 +43,23 @@ namespace LibaryManagementSystem.Controllers
             }
         }
 
-        [HttpPut("{Id}/status/{statusId}")] 
-        public async Task<IActionResult> UpdateReservationStatus( Guid Id, Guid statusId)
+        [HttpPut("{Id}/status")]
+        public async Task<IActionResult> UpdateReservationStatus(Guid Id, ReservationStatus status)
         {
-            var existingReservation = await _reservation.GetReservationByIdAsync(Id);
-
-            if (existingReservation == null)
+            var result = await _reservation.UpdateReservationStatusAsync(Id, status);
+            if (result)
             {
-                return NotFound("Reservation not found");
+                return Ok(new { message = "Success", status = "Updated" });
             }
-
-            var result = await _reservation.UpdateReservationStatusAsync(Id, statusId);
-
-            if (result == "Updated")
+            else
             {
-                return Ok("Reservation status updated successfully");
+                return BadRequest(new { message = "Failed to update reservation status" });
             }
-
-            return BadRequest("Failed to update reservation status");
         }
 
+
         [HttpPost("Create")]
-        public async Task<IActionResult> Create([FromBody]BookReservationRequestDto request)
+        public async Task<IActionResult> Create([FromBody] BookReservationRequestDto request)
         {
             if (!ModelState.IsValid)
             {
@@ -69,10 +68,65 @@ namespace LibaryManagementSystem.Controllers
             await _reservation.AddReservationAsync(request);
             return Ok(new { message = "Book issue request has been submitted successfully. Please check the status of your request after sometime." });
         }
-        
 
 
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> UpdateReservation(Guid Id, [FromBody] BookReservationRequestDto request)
+        {
+            await _reservation.UpdateReservationAsync(Id, request);
+            return Ok("BookReservation Updated Successfully");
+        }
 
+        [HttpDelete("Delete/{Id}")]
+
+        public async Task<IActionResult> DeleteReservationAsync(Guid Id)
+        {
+            try
+            {
+                await _reservation.DeleteReservationAsync(Id);
+                return Ok(new { message = "Reservation deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while deleting the Reservation.", details = ex.Message });
+            }
+        }
+                [HttpGet("statuses/GetAll")]
+        public IActionResult GetStatuses()
+        {
+            var statuses = Enum.GetValues(typeof(ReservationStatus))
+                                .Cast<ReservationStatus>()
+                                .Select(s => new { Id = (int)s, StatusName = s.ToString() })
+                                .ToList();
+
+            return new ObjectResult(statuses) { StatusCode = 200 };
+        }
+
+        [HttpGet("GetFilteredReservations")]
+        public async Task<IActionResult> GetFilteredReservations([FromQuery] ReservationSearchRequestDto filterRequest)
+        {
+            if (filterRequest.PageNumber <= 0 || filterRequest.PageSize <= 0)
+            {
+                return BadRequest("PageNumber and PageSize must be greater than 0.");
+            }
+
+            try
+            {
+                var (reservations, totalCount) = await _reservationSearch.GetFilteredReservations(filterRequest);
+
+                return Ok(new
+                {
+                    TotalCount = totalCount,
+                    Reservations = reservations
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
-  }
+    }
+
+  
 

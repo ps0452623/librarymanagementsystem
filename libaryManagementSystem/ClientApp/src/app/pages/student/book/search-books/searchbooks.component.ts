@@ -5,6 +5,7 @@ import { BranchService } from '@services/branch.service';
 import { CourseService } from '@services/course.service';
 import { ReservationService } from '@services/reservation.service';
 import { environment } from 'environments/environment';
+import { ToastRef, ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 
 
@@ -17,20 +18,21 @@ export class SearchBooksComponent implements OnInit {
   books$: any[];
   TotalCount: number = 0;
   PageNumber: number = 1;
-  PageSize: number =2;
+  PageSize: number = 2;
   searchForm: FormGroup;
   courses$: Observable<any[]>;
   branches$: Observable<any[]> = new Observable();
-  imageUrl= environment.imageUploadUrl;
-  reserveBookForm!: FormGroup; 
+  imageUrl = environment.imageUploadUrl;
+  reserveBookForm!: FormGroup;
   selectedBook: any;
   modalInstance: any;
 
 
-  constructor(private bookService: BookService,private courseservice: CourseService,
-       private branchservice : BranchService, private fb: FormBuilder, private reservationService:ReservationService) { }
+  constructor(private bookService: BookService, private toastr : ToastrService, private courseservice: CourseService,
+    private branchservice: BranchService, private fb: FormBuilder, private reservationService: ReservationService) { }
 
   ngOnInit(): void {
+    debugger;
     this.searchForm = this.fb.group({
       Title: [''],
       Genre: [''],
@@ -38,35 +40,38 @@ export class SearchBooksComponent implements OnInit {
       Course: [''],  // Added course dropdown
       BranchName: ['']
     });
+    debugger;
     this.loadCourses();
-    this.GetBooks(); 
+    this.GetBooks();
     this.loadBooks();
 
-    
+
     this.reserveBookForm = this.fb.group({
       userId: ['0DB811F6-8B7A-4071-617C-08DD6A27CB1D', Validators.required],
-      noOfCopies: [1, [Validators.required, Validators.min(1)]],
+      numberOfCopies: [1, [Validators.required, Validators.min(1)]],
       reservationDate: ['', Validators.required],
       returnDate: ['', Validators.required]
     });
   }
-  selectBook(bookId:any)
-  {
-    this.selectedBook=bookId;
-    alert(bookId);
+  selectBook(bookId: any) {
+    this.selectedBook = bookId;
+   
   }
   loadBooks() {
     this.bookService.GetBooks().subscribe((data) => {
       this.books$ = data;
     });
   }
-  ReserveBook() {
+
+  ReserveBook(): void {
+    
     if (this.reserveBookForm.valid && this.selectedBook) {
+      
       const reservationData = {
         bookId: this.selectedBook,
         userId: this.reserveBookForm.value.userId,
         noOfCopies: this.reserveBookForm.value.noOfCopies,
-        reservationDate: this.reserveBookForm.value.issueDate,
+        reservationDate: this.reserveBookForm.value.reservationDate,
         returnDate: this.reserveBookForm.value.returnDate
       };
 
@@ -74,18 +79,17 @@ export class SearchBooksComponent implements OnInit {
       this.reservationService.ReserveBook(reservationData).subscribe(
         (response: any) => {
           debugger;
-          alert('Book reserved successfully!');
-        this.modalInstance?.hide();
-         
+          this.toastr.success('Book reserved successfully!');
+          this.modalInstance?.hide();
+          this.closemodal();
+
         },
-        (error) => {
-          debugger;
-          console.error('Reservation failed:', error);
-        }
+        
       );
 
-    
+
     } else {
+      this.toastr.warning("Please Fill All The Required fields")
       console.log('Form is invalid:', this.reserveBookForm.errors);
     }
   }
@@ -96,8 +100,8 @@ export class SearchBooksComponent implements OnInit {
   }
 
   loadBranches(): void {
-    
-      this.branches$ = this.branchservice.GetBranchesByCourse(this.searchForm.value.Course); // Fetch branches for the selected course
+
+    this.branches$ = this.branchservice.GetBranchesByCourse(this.searchForm.value.Course); // Fetch branches for the selected course
   }
 
   GetBooks(): void {
@@ -111,8 +115,8 @@ export class SearchBooksComponent implements OnInit {
       isAscending: true, // Ascending/Descending Order
       pageNumber: this.PageNumber,
       pageSize: 2
-  };
-  
+    };
+
 
     this.bookService.GetFilteredBooks(bookSearchRequest).subscribe(response => {
       this.books$ = response.books;
@@ -121,19 +125,32 @@ export class SearchBooksComponent implements OnInit {
   }
 
   getTotalPages(): number {
-  return Math.ceil(this.TotalCount / this.PageSize);
-}
+    return Math.ceil(this.TotalCount / this.PageSize);
+  }
 
-onPageChange(newPage: number): void {
-  if (newPage < 1 || newPage > this.getTotalPages()) return;
-  this.PageNumber = newPage;
-  this.GetBooks();
-}
+  onPageChange(newPage: number): void {
+    if (newPage < 1 || newPage > this.getTotalPages()) return;
+    this.PageNumber = newPage;
+    this.GetBooks();
+  }
 
 
 
   applyFilters(): void {
     this.PageNumber = 1; // Reset to first page when applying filters
     this.GetBooks();
+  }
+  closemodal(): void {
+    const modalElement = document.getElementById('ReserveBooks');
+    if (modalElement) {
+      modalElement.classList.remove('show'); // Remove the 'show' class
+      modalElement.setAttribute('aria-hidden', 'true'); // Set aria-hidden to true
+      modalElement.style.display = 'none'; // Hide the modal
+      const backdrop = document.querySelector('.modal-backdrop');
+      if (backdrop) {
+        backdrop.parentNode?.removeChild(backdrop);
+
+      }
+    }
+  }
 }
-} 
