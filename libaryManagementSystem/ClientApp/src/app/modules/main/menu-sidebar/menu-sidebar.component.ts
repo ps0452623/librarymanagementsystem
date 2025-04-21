@@ -44,6 +44,11 @@ export const MENU = [
         path: ['/faculty/books']
     },
     {
+        name: 'Book Reservation Requests',
+        iconClasses: 'fas fa-file',
+        path: ['/faculty/BookReservationRequests']
+    },
+    {
         name: 'Main Menu',
         iconClasses: 'fas fa-folder',
         children: [

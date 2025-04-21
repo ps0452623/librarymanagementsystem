@@ -32,6 +32,7 @@ export class SearchBooksComponent implements OnInit {
     private branchservice: BranchService, private fb: FormBuilder, private reservationService: ReservationService) { }
 
   ngOnInit(): void {
+    debugger;
     this.searchForm = this.fb.group({
       Title: [''],
       Genre: [''],
@@ -39,6 +40,7 @@ export class SearchBooksComponent implements OnInit {
       Course: [''],  // Added course dropdown
       BranchName: ['']
     });
+    debugger;
     this.loadCourses();
     this.GetBooks();
     this.loadBooks();

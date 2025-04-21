@@ -27,7 +27,7 @@ export class UpdateBookComponent implements OnInit {
   branches$: Observable<any[]>;
   CourseId: any;
   selectedCourseId: any;
-  bookId:string | null = null; 
+  bookId:any | null = null; 
 bookToEdit:any;
 Picture;
   
@@ -61,11 +61,7 @@ Picture;
         debugger;
         this.loadCourses();
         this.bookId = this.route.snapshot.params['id']; // Get the book ID from the route
-        if (this.bookId) {
-          this.loadBookDetails();
-        }else {
-          this.toastr.error('Book ID is missing.');
-        }
+        this.loadBookDetails();  
       }
       loadCourses(): void {
         this.courses$ = this.courseservice.GetCourse();

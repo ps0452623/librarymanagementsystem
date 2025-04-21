@@ -50,8 +50,12 @@ namespace Service.Implementation
 
         public async Task<IEnumerable<BookResponseDto>> GetAll()
         {
-            var books = await _repository.GetAllAsync();
-            return _mapper.Map<IEnumerable<BookResponseDto>>(books);
+            var books = await _repository.GetQueryable()
+        .Include(x => x.Branch)  
+        .Include(x => x.Branch.Course)  
+        .ToListAsync(); 
+
+    return _mapper.Map<IEnumerable<BookResponseDto>>(books);
 
         }
 
@@ -93,7 +97,6 @@ namespace Service.Implementation
             _mapper.Map(bookRequestDto, existingBook);
             if (bookRequestDto.Picture != null && bookRequestDto.Picture.Length > 0)
             {
-                // Delete old picture if it exists
                 if (!string.IsNullOrEmpty(existingBook.Picture))
                 {
                     var oldFilePath = Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot", existingBook.Picture.TrimStart('/'));
@@ -103,7 +106,7 @@ namespace Service.Implementation
                     }
                 }
 
-                existingBook.Picture = SaveBookPicture(bookRequestDto.Picture); // Update new picture
+                existingBook.Picture = SaveBookPicture(bookRequestDto.Picture); 
             }
 
 
@@ -114,12 +117,7 @@ namespace Service.Implementation
         public async Task Delete(Guid id)
         {
             var book = await _repository.GetByIdAsync(id);
-            if (book == null)
-            {
-                throw new KeyNotFoundException("Book not found");
 
-
-            }
             if (!string.IsNullOrEmpty(book.Picture))
             {
                 var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", book.Picture.TrimStart('/'));
@@ -136,8 +134,7 @@ namespace Service.Implementation
         {
             var query = _repository.GetQueryable().Include(x => x.Branch).AsQueryable();
 
-            // Search Filter - Case Insensitive
-
+          
             if (!string.IsNullOrEmpty(filterRequest.Title))
             {
                 string searchLower = filterRequest.Title.ToLower();
@@ -146,36 +143,36 @@ namespace Service.Implementation
                     b.Author.ToLower().Contains(searchLower) ||
                     b.Publisher.ToLower().Contains(searchLower));
             }
-            // Genre Filter - multiple
+           
 
             if (filterRequest.Genre != null && filterRequest.Genre.Any())
             {
                 query = query.Where(b => filterRequest.Genre.Contains(b.Genre));
             }
-            // YearPublished Filter
+          
 
 
             if (!string.IsNullOrEmpty(filterRequest.YearPublished))
             {
                 query = query.Where(b => b.YearPublished == Convert.ToInt32(filterRequest.YearPublished));
             }
-            // Branch Filter - 
+           
             if (!string.IsNullOrEmpty(filterRequest.BranchName))
             {
                 query = query.Where(b => b.Branch != null && b.Branch.Name.Contains(filterRequest.BranchName));
             }
 
 
-            //Apply Sorting
+           
             query = filterRequest.SortBy?.ToLower() switch
             {
                 "title" => filterRequest.IsAscending ? query.OrderBy(b => b.Title) : query.OrderByDescending(b => b.Title),
                 "author" => filterRequest.IsAscending ? query.OrderBy(b => b.Author) : query.OrderByDescending(b => b.Author),
                 "publisher" => filterRequest.IsAscending ? query.OrderBy(b => b.Publisher) : query.OrderByDescending(b => b.Publisher),
-                _ => query.OrderBy(b => b.Title) // Default sorting by Title
+                _ => query.OrderBy(b => b.Title) 
             };
 
-            // Apply Pagination
+           
                    int totalCount = await query.CountAsync();
             var books = await query.Skip((filterRequest.PageNumber - 1) * 2)
                              .Take(2)
@@ -183,7 +180,7 @@ namespace Service.Implementation
 
             if (query == null || !query.Any())
             {
-                return (null, 0); // No books found
+                return (null, 0); 
             }
             var bookDtos = _mapper.Map<IEnumerable<BookSearchResponseDto>>(books);
 

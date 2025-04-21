@@ -13,7 +13,7 @@ export class BranchService {
 
   constructor(private httpclient : HttpClient, private apiservice : ApiServiceService) { }
   
-  GetBranchesByCourse(courseId : string): Observable<any[]>{
+  GetBranchesByCourse(courseId : any): Observable<any[]>{
     return this.apiservice.get(`Branch/GetByCourse/${courseId}`)  
   }
 }

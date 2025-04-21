@@ -23,8 +23,12 @@ namespace DTO
 
         [Required(ErrorMessage = "ReturnDate Is Required")]
         public DateTime ReturnDate { get; set; }
+        //public Guid StatusId { get; set; }
+        public DateTime CreatedOn {  get; set; }
+       
 
-        
+
+
     }
     public class BookReservationResponseDto : BookReservationRequestDto
     {
@@ -33,6 +37,5 @@ namespace DTO
         public string Picture { get; set; }
         public string UserName { get; set; }
         public string Status { get; set; }
-        public DateTime CreatedOn { get; set; }
     }
 }

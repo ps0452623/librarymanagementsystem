@@ -2,8 +2,12 @@
 using DataAccessLayer.Repository;
 using DataAcessLayer.Data;
 using DataAcessLayer.Entities;
+using DataAcessLayer.Enum;
 using DTO;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Service.Interface;
 using System;
 using System.Collections.Generic;
@@ -18,22 +22,22 @@ namespace Service.Implementation
         private readonly AppDbContext _context;
 
         private readonly IGenericRepository<BookReservation> _reserveRepository;
+        private readonly IGenericRepository<Book> _bookRepository;
 
         private readonly IMapper _mapper;
 
 
-        public BookReservationService(IGenericRepository<BookReservation> reserveRepository, AppDbContext context, IMapper mapper)
+        public BookReservationService(IGenericRepository<BookReservation> reserveRepository, AppDbContext context, IMapper mapper, IGenericRepository<Book> bookRepository)
         {
             _reserveRepository = reserveRepository;
             _mapper = mapper;
             _context = context;
+            _bookRepository = bookRepository;
         }
-
-
-        //______________GetAll________________________
+       
 
         public async Task<IEnumerable<BookReservationResponseDto>> GetAllReservationsAsync()
-        {
+            {
             var reserve = _reserveRepository.GetQueryable()
                 .Include(x => x.Book).AsQueryable()
                 .Include(x => x.User).AsQueryable();
@@ -43,10 +47,6 @@ namespace Service.Implementation
 
         }
 
-
-
-
-        //_________________GetById_______________________
         public async Task<BookReservationResponseDto> GetReservationByIdAsync(Guid Id)
         {
 
@@ -62,35 +62,46 @@ namespace Service.Implementation
             }
         }
 
-        //_________________Post________________________________________
         public async Task AddReservationAsync(BookReservationRequestDto request)
         {
             var reservation = _mapper.Map<BookReservation>(request);
             await _reserveRepository.AddAsync(reservation);
         }
-        //public async Task<string> UpdateReservationStatusAsync(Guid BookReservationId, Guid StatusId)
-        //{
-        //    var reservation = await _reserveRepository.GetByIdAsync(BookReservationId);
-        //    if (reservation == null)
-        //        return ("Reservation Not Found");
-
-        //    reservation.StatusId = StatusId;
-        //    await _reserveRepository.UpdateAsync(reservation);
-
-        //    return ("ReservationStatus Updated");
 
 
-        //}
-        //-------------------Put-----------------//
+        public async Task<bool> UpdateReservationStatusAsync(Guid BookReservationId, ReservationStatus Status)
+        
+        {
+            var reservation = await _reserveRepository.GetByIdAsync(BookReservationId);
+            reservation.Status = Status;
+            if (Status == ReservationStatus.Accepted)
+            {
+                var book = await _bookRepository.GetByIdAsync(reservation.BookId);
+                if (book == null)
+                    return false;
+
+                if (book.CopiesAvailable < reservation.NumberOfCopies)
+                    throw new InvalidOperationException("Not enough copies available.");
+
+                book.CopiesAvailable -= reservation.NumberOfCopies;
+                await _bookRepository.UpdateAsync(book);
+            }
+            if (Status == ReservationStatus.Returned)
+            {
+                var book = await _bookRepository.GetByIdAsync(reservation.BookId);
+                book.CopiesAvailable += reservation.NumberOfCopies;
+                await _bookRepository.UpdateAsync(book);
+            }
+
+            await _reserveRepository.UpdateAsync(reservation);
+            return true;
+
+
+        }
         public async Task UpdateReservationAsync(Guid Id, BookReservationRequestDto request)
         {
             var reservation = await _reserveRepository.GetByIdAsync(Id);
-            if (reservation == null)
-            {
-                throw new KeyNotFoundException("Reservation not found.");
-            }
 
-           
             reservation.BookId = request.BookId;
             reservation.UserId = request.UserId;
             reservation.NumberOfCopies = request.NumberOfCopies;
@@ -98,19 +109,17 @@ namespace Service.Implementation
             reservation.ReturnDate = request.ReturnDate;
 
             await _reserveRepository.UpdateAsync(reservation);
-            return ;
+            return;
         }
 
-
-
-
-
-        //----------------------Delete---------------------//
         public async Task DeleteReservationAsync(Guid Id)
         {
             await _reserveRepository.DeleteAsync(Id);
             return;
         }
-    }
 
+       
+
+
+    }
 }

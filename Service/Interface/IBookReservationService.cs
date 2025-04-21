@@ -1,4 +1,5 @@
-﻿using DTO;
+﻿using DataAcessLayer.Enum;
+using DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,9 @@ namespace Service.Interface
         Task AddReservationAsync(BookReservationRequestDto request);
         Task UpdateReservationAsync( Guid Id, BookReservationRequestDto bookrequestDto);
 
-        //Task<string> UpdateReservationStatusAsync(Guid BookReservationId, Guid StatusId);
+        Task<bool> UpdateReservationStatusAsync(Guid BookReservationId, ReservationStatus Status);
         Task DeleteReservationAsync(Guid Id);
+
+
     }
 }

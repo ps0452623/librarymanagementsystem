@@ -5,11 +5,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RegisterService } from '@services/register.service';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'app-register',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule],
+    imports: [CommonModule, ReactiveFormsModule, RouterModule],
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss']
 })
@@ -71,6 +72,8 @@ export class RegisterComponent implements OnInit {
                 this.toastr.error("Registration failed. Please try again.", "Error");
                 console.error("Registration Error:", error);
             }
-        });
+            
+        }
+    );
     }
 }

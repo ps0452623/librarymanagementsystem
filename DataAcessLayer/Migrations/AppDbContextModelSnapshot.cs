@@ -192,9 +192,6 @@ namespace DataAcessLayer.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("NumberOfCopies")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("ReservationDate")
                         .HasColumnType("datetime2");
 

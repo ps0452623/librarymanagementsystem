@@ -3,6 +3,7 @@ using DataAccessLayer.Data;
 using DataAcessLayer;
 using DataAcessLayer.Entities;
 using DTO;
+using DTO.Enum;
 
 
 namespace LibaryManagementSystem.MappingProfile
@@ -35,11 +36,12 @@ namespace LibaryManagementSystem.MappingProfile
                .ForMember(dest => dest.Picture, opt => opt.MapFrom(src => src.Book.Picture))  
 
             .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FirstName))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => "Pending"));
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
             CreateMap<BookReservationRequestDto, BookReservation>()
 
                 .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => DateTime.UtcNow))
-            .ForMember(dest => dest.StatusId, opt => opt.MapFrom(src => Guid.Parse("612A98BC-6A00-4191-B961-A2D43484E0A6")));
+            //.ForMember(dest => dest.StatusId, opt => opt.MapFrom(src => src.StatusId))
+            ;
 
 
             CreateMap<Book, BookSearchResponseDto>()
@@ -47,6 +49,15 @@ namespace LibaryManagementSystem.MappingProfile
             CreateMap<BookSearchRequestDto, Book>();
 
             CreateMap<CourseDto, BookRequestDto>().ForMember(dest => dest.CourseId, opt => opt.MapFrom(src => src.Id));
+            CreateMap<ReservationSearchRequestDto, BookReservation>();
+            CreateMap<BookReservation, ReservationSearchResponseDto>().
+             ForMember(dest => dest.BookTitle, opt => opt.MapFrom(src => src.Book.Title))
+               .ForMember(dest => dest.Picture, opt => opt.MapFrom(src => src.Book.Picture))
+
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FirstName))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status)); ;
+            ;
+
         }
     }
 }

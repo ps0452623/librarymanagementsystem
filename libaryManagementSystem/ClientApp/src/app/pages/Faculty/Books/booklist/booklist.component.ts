@@ -35,9 +35,8 @@ export class BookListComponent implements OnInit {
     this.GetBooks();
   }
 
-  // Fetch books from API
   GetBooks(): void {
-    this.books$ = this.bookService.GetBooks(); // ✅ Assign the observable directly
+    this.books$ = this.bookService.GetBooks();
   }
   updateBook(bookId: any): void {
     console.log('Update book with ID:', bookId);
@@ -45,7 +44,6 @@ export class BookListComponent implements OnInit {
 DeleteBook(bookId: any): void {
   debugger;
   
-  // Show SweetAlert2 info dialog before asking for confirmation
   Swal.fire({
     title: 'Are you sure?',
     text: 'Do you really want to delete this book?',
@@ -57,13 +55,11 @@ DeleteBook(bookId: any): void {
     allowOutsideClick: false
   }).then((result) => {
     if (result.isConfirmed) {
-      // Proceed with the deletion if confirmed
       this.bookService.DeleteBook(bookId).subscribe(
         (response: any) => {
           this.GetBooks();
           console.log("API Response:", response);
 
-          // Show success notification using SweetAlert2
           Swal.fire({
             icon: 'success',
             title: 'Deleted!',
@@ -75,7 +71,6 @@ DeleteBook(bookId: any): void {
         (error) => {
           console.error('There was an error deleting the book!', error);
 
-          // Show error notification using SweetAlert2
           Swal.fire({
             icon: 'error',
             title: 'Error!',
@@ -86,7 +81,6 @@ DeleteBook(bookId: any): void {
         }
       );
     } else {
-      // Show info notification if the deletion was canceled
       Swal.fire({
         icon: 'info',
         title: 'Canceled',
